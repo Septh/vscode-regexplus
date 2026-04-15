@@ -1,0 +1,35 @@
+{
+  "include": [
+    "source",
+    "script",
+    // "rollup.config.js"
+  ],
+  "compilerOptions": {
+
+    // Environment
+    "module": "node20",
+    "target": "ESNext",
+    "lib": [ "ESNext" ],
+    "types": [ "node" ],
+
+    // Input
+    "resolveJsonModule": true,
+    "checkJs": true,
+
+    // Output
+    "rewriteRelativeImportExtensions": true,
+    "noEmit": true,
+
+    // Type checking
+    "strict": true,
+    "skipLibCheck": false,
+    "skipDefaultLibCheck": true,
+    "exactOptionalPropertyTypes": true,
+    "noUncheckedIndexedAccess": false,
+    "noPropertyAccessFromIndexSignature": true,
+    "noImplicitReturns": true,
+    "noImplicitOverride": true,
+    "noUncheckedSideEffectImports": true,
+    "verbatimModuleSyntax": true
+  }
+}

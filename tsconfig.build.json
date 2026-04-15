@@ -1,0 +1,18 @@
+{
+  "extends": "./tsconfig.json",
+  "include": [ "source" ],
+  "compilerOptions": {
+
+    // Input
+    "rootDir": "source",
+
+    // Output
+    "outDir": "out",
+    "sourceMap": true,
+    "declaration": false,
+    "removeComments": true,
+    "allowJs": false,
+    "checkJs": false,
+    "noEmit": false
+  }
+}

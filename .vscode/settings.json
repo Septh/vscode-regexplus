@@ -1,0 +1,5 @@
+{
+  "js/ts.tsdk.path": "node_modules\\typescript\\lib",
+  "debug.openDebug": "openOnDebugBreak",
+  "debug.console.closeOnEnd": true
+}

@@ -1,0 +1,52 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "clean",
+      "hide": true,
+      "type": "npm",
+      "script": "clean",
+      "presentation": {
+        "group": "X"
+      }
+    },
+    {
+      "label": "build:code",
+      "hide": true,
+      "type": "typescript",
+      "tsconfig": "tsconfig.build.json",
+      "option": "watch",
+      "problemMatcher": "$tsc-watch",
+      "dependsOn": "clean",
+      "presentation": {
+        "group": "X"
+      }
+    },
+    {
+      "label": "build:grammars",
+      "hide": true,
+      "type": "shell",
+      "command": "node",
+      "args": [ "${workspaceFolder}/script/convert-grammarS.mts", "--watch" ],
+      "dependsOn": "clean",
+      "isBackground": true,
+      "presentation": {
+        "group": "X"
+      }
+    },
+    {
+      "label": "build:all",
+      "hide": true,
+      "dependsOn": [ "build:code", "build:grammars" ],
+      "dependsOrder": "sequence"
+    },
+    {
+      "label": "build",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "dependsOn": "build:all"
+    }
+  ]
+}
