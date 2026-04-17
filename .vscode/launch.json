@@ -10,9 +10,10 @@
 			"type": "extensionHost",
 			"request": "launch",
 			"args": [
+				"--disable-extensions",
 				"--extensionDevelopmentPath=${workspaceFolder}"
 			],
-			"internalConsoleOptions": "openOnSessionStart"
+			"internalConsoleOptions": "neverOpen"
 		}
 	]
 }

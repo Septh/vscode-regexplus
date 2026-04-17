@@ -3,7 +3,6 @@
   "tasks": [
     {
       "label": "clean",
-      "hide": true,
       "type": "npm",
       "script": "clean",
       "presentation": {
@@ -12,23 +11,23 @@
     },
     {
       "label": "build:code",
-      "hide": true,
       "type": "typescript",
       "tsconfig": "tsconfig.build.json",
       "option": "watch",
       "problemMatcher": "$tsc-watch",
-      "dependsOn": "clean",
+      // "dependsOn": "clean",
+      // "dependsOrder": "sequence",
       "presentation": {
         "group": "X"
       }
     },
     {
       "label": "build:grammars",
-      "hide": true,
       "type": "shell",
       "command": "node",
       "args": [ "${workspaceFolder}/script/convert-grammarS.mts", "--watch" ],
-      "dependsOn": "clean",
+      // "dependsOn": "clean",
+      // "dependsOrder": "sequence",
       "isBackground": true,
       "presentation": {
         "group": "X"
@@ -38,7 +37,7 @@
       "label": "build:all",
       "hide": true,
       "dependsOn": [ "build:code", "build:grammars" ],
-      "dependsOrder": "sequence"
+      "dependsOrder": "parallel"
     },
     {
       "label": "build",
@@ -46,7 +45,8 @@
         "kind": "build",
         "isDefault": true
       },
-      "dependsOn": "build:all"
+      "dependsOn": "build:all",
+      "dependsOrder": "sequence"
     }
   ]
 }

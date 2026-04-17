@@ -1,6 +1,7 @@
 import path from 'node:path'
 import fs from 'node:fs/promises'
 import yaml from 'js-yaml'
+import { styleText } from 'node:util'
 
 const sourceDir = path.join(import.meta.dirname, '../source/grammars')
 const outputDir = path.join(import.meta.dirname, '../languages/grammars')
@@ -8,11 +9,10 @@ let signal: AbortSignal | undefined = undefined
 
 debugger
 try {
-    console.group('Converting...')
+    console.log('Reading source directory', styleText('yellow', displayName(sourceDir)))
     await fs.mkdir(outputDir, { recursive: true })
     for await (const filename of fs.glob('*.yaml', { cwd: sourceDir }))
         await convert(filename)
-    console.groupEnd()
 
     if (process.argv[2] === '--watch') {
         console.log("Watching...")
@@ -34,14 +34,36 @@ try {
     }
 
     async function convert(filename: string) {
-        console.log(filename)
-
         const sourceFile = path.join(sourceDir, filename)
-        const parsed = yaml.load(await fs.readFile(sourceFile, 'utf-8'), { filename })
+        const raw = await fs.readFile(sourceFile, 'utf-8')
 
-        const outputFile = path.join(outputDir, filename.replace(/\.yaml$/, '.json'))
-        const json = JSON.stringify(parsed, undefined, 2)
-        await fs.writeFile(outputFile, json)
+        console.group('Converting', styleText('yellow', displayName(sourceFile)))
+        if (filename === 'regex+.tmLanguage.yaml') {
+            // Doing a straight read/convert/write for the main language file.
+            const parsed = yaml.load(raw, { filename })
+            const json = JSON.stringify(parsed, undefined, 2)
+
+            const outputFile = path.join(outputDir, 'regex+.tmLanguage.json')
+            console.log('Writing', styleText('blue', displayName(outputFile)))
+            await fs.writeFile(outputFile, json)
+        }
+        else if (filename === 'injection.tmLanguage.yaml') {
+            // One source, four files.
+            for (const ext of [ "ts", "tsx", "js", "jsx" ]) {
+                const replaced = raw.replaceAll('$host-language$', ext)
+                const parsed = yaml.load(replaced, { filename })
+                const json = JSON.stringify(parsed, undefined, 2)
+
+                const outputFile = path.join(outputDir, `injection.${ext}.tmLanguage.json`)
+                console.log('Writing', styleText('blue', displayName(outputFile)))
+                await fs.writeFile(outputFile, json)
+            }
+        }
+        console.groupEnd()
+    }
+
+    function displayName(filename: string) {
+        return path.relative(process.cwd(), filename)
     }
 }
 catch (e) {

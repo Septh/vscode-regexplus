@@ -1,0 +1,235 @@
+$schema: https://json.schemastore.org/tmlanguage.json
+name: Regexp+
+scopeName: text.regexplus
+
+patterns:
+  - include: '#all'
+
+repository:
+  all:
+    patterns:
+      # Matching escaped tokens first eliminates the need for look-behinds in subsequent patterns.
+      - include: '#token-escape'
+
+      - include: '#character-escape'
+      - include: '#line-comment'
+      - include: '#boundary-assertion'
+      - include: '#disjunction'
+      - include: '#wildcard'
+      - include: '#quantifier'
+      - include: '#character-class-escape'
+      - include: '#unicode-character-class-escape'
+      - include: '#character-class'
+      - include: '#backreference'
+      - include: '#modifiers'
+      - include: '#group'
+
+      # Anything that didn't match before is considered a literal.
+      - match: \S
+        name: string.regexp
+
+  token-escape:
+    match: '(?x)\\[ \\ \[ \] () {} # | ^ $ / ]'
+    name: constant.character.escape.regexplus
+
+  character-escape:
+    patterns:
+      - match: \\(?:[fnrtv]|0(?!\d))
+        name: constant.character.escape.regexplus
+      - match: \[\\b\]
+        name: constant.character.escape.regexplus
+      - match: \\c[A-Za-z]
+        name: constant.character.escape.regexplus
+      - match: (\\x)([a-fA-F0-9]{2})
+        captures:
+          1: { name: constant.character.escape.regexplus }
+          2: { name: constant.numeric.regexplus }
+      - match: (\\u\{)([a-fA-F0-9]{1,6})(\})
+        captures:
+          1: { name: constant.character.escape.regexplus }
+          2: { name: constant.numeric.regexplus }
+          3: { name: constant.character.escape.regexplus }
+      - match: (\\u)([a-fA-F0-9]{4})
+        captures:
+          1: { name: constant.character.escape.regexplus }
+          2: { name: constant.numeric.regexplus }
+
+  line-comment:
+    # https://github.com/slevithan/regex/tree/main#flag-x
+    match: '#[^\n]*'
+    name: comment.line.number-sign.regexplus
+
+  boundary-assertion:
+    match: \^|\$|\\[bB]
+    name: constant.language.regexplus
+
+  disjunction:
+    match: \|
+    name: keyword.operator.or.regexp    # Same as TS/JS
+
+  wildcard:
+    match: \.
+    name: keyword.operator.or.regexp    # Same as TS/JS
+
+  quantifier:
+    # https://github.com/slevithan/regex/tree/main#possessive-quantifiers
+    patterns:
+      - match: '[*?+][?+]?'
+        name: meta.quantifier.regexplus
+        captures:
+          0: { name: keyword.operator.quantifier.regexp }   # Same as TS/JS
+      - begin: \{
+        end: \}[?+]?
+        name: meta.quantifier.regexplus
+        captures:
+          0: { name: keyword.operator.quantifier.regexp }   # Same as TS/JS
+        patterns:
+          # Matches the '{,y}' form.
+          - match: (,)\s*(\d+)(?=\s*\})
+            captures:
+              1: { name: keyword.operator.separator.regexplus }
+              2: { name: constant.numeric.regexplus }
+          # Matches the '{x,}' and '{x,y}' forms.
+          - match: (\d+)\s*(?:(,)\s*(\d*))?(?=\s*\})
+            captures:
+              1: { name: constant.numeric.regexplus }
+              2: { name: keyword.operator.separator.regexplus }
+              3: { name: constant.numeric.regexplus }
+          - match: \S
+            name: invalid.illegal
+
+  character-class-escape:
+    match: \\[sSdDwW]
+    name: constant.character.escape.regexplus
+    captures:
+      0: { name: support.class.regexplus }
+
+  unicode-character-class-escape:
+    match: (\\[pP])\{\w*(?:=\w*)?\}
+    name: constant.character.escape.regexplus
+    captures:
+      1: { name: support.class.regexplus }
+
+  character-class:
+    begin: \[\s*(\^)?
+    end: \]
+    name: meta.character-class.regexplus
+    contentName: string.regexp
+    captures:
+      0: { name: punctuation.definition.character-class.regexp }  # Same as TS/JS
+    patterns:
+      - include: '#token-escape'
+      - include: '#character-escape'
+      - include: '#character-class-escape'  # Note: no unicode, \p is not valid inside character classes.
+      - match: \\[pP]
+        name: invalid.illegal
+      - begin: \\q\{
+        end: \}
+        name: punctuation.definition.character-class.regexp
+        contentName: string.regexp
+        patterns:
+          - include: '#token-escape'
+          - include: '#character-escape'
+          - include: '#disjunction'
+      - match: --|&&
+        name: keyword.operator.or.regexp    # Same as TS/JS
+      - include: '#quantifier'
+      - include: '#character-class'         # Recursive
+
+  backreference:
+    patterns:
+      - match: (\\[1-9](?=\D))
+        name: variable.other.regexplus
+      - match: (\\k<)(\w*)(>)     # TODO(Septh): \w is incorrect, could be any JS identifier
+        captures:
+          1: { name: keyword.other.regexplus }
+          2: { name: variable.other.regexplus }
+          3: { name: keyword.other.regexplus }
+      - match: (\\g<)(\w*)(>)     # TODO(Septh): \w is incorrect, could be any JS identifier
+        captures:
+          1: { name: keyword.other.regexplus }
+          2: { name: entity.name.function.regexplus }
+          3: { name: keyword.other.regexplus }
+
+  modifiers:
+    begin: \(\?(?![>=!<:(])
+    end: \)
+    name: punctuation.definition.group.regexp
+    patterns:
+      # Matches the '-ims' form.
+      - match: -([ims])+(?=\s*\))
+        name: constant.language.regexplus
+      # Matches the 'ims' and 'ims-ims' forms.
+      - match: ([ims])+(?:-[ims]*)?(?=\s*\))
+        name: constant.language.regexplus
+
+  group:
+    patterns:
+      - include: '#atomic-group'
+      - include: '#look-around'
+      - include: '#non-capturing-group'
+      - include: '#named-capturing-group'
+      - include: '#subroutine-definition-group'
+      - include: '#simple-capturing-group'
+
+  atomic-group:
+    # https://github.com/slevithan/regex/tree/main#atomic-groups
+    name: meta.group.regexplus
+    begin: \(\?>
+    end: \)
+    captures:
+      0: { name: punctuation.definition.group.regexp }
+    patterns:
+      - include: '#all'
+
+  look-around:
+    name: meta.group.regexplus
+    begin: \(\?(?:=|!|<=|<!)
+    end: \)
+    captures:
+      0: { name: punctuation.definition.group.regexp }
+    patterns:
+      - include: '#all'
+
+  non-capturing-group:
+    name: meta.group.regexplus
+    begin: '\(\?:'
+    end: \)
+    captures:
+      0: { name: punctuation.definition.group.regexp }
+    patterns:
+      - include: '#all'
+
+  named-capturing-group:
+    name: meta.group.regexplus
+    begin: (\(\?<)(\w+)(>)    # TODO(Septh): \w is incorrect, could be any JS identifier
+    beginCaptures:
+      1: { name: punctuation.definition.group.regexp }
+      2: { name: variable.other.constant.regexplus }
+      3: { name: punctuation.definition.group.regexp }
+    end: \)
+    endCaptures:
+      0: { name: punctuation.definition.group.regexp }
+    patterns:
+      - include: '#all'
+
+  subroutine-definition-group:
+    name: meta.group.regexplus
+    begin: \(\?\((DEFINE)\)
+    end: \)
+    captures:
+      0: { name: punctuation.definition.group.regexp }
+      1: { name: support.function.regexp }
+    patterns:
+      - include: '#all'
+
+  simple-capturing-group:
+    name: meta.group.regexplus
+    begin: \((?!\?)
+    end: \)
+    captures:
+      0: { name: punctuation.definition.group.regexp }
+    patterns:
+      - include: '#all'
+
+...

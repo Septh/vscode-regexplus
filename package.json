@@ -1,5 +1,5 @@
 {
-  "name": "vscode-regex-plus",
+  "name": "vscode-regexplus",
   "displayName": "Regex+",
   "description": "Highlighting for Regex+ template strings",
   "version": "0.0.1",
@@ -10,13 +10,12 @@
   },
   "license": "MIT",
   "engines": {
-    "vscode": "^1.100.0"
+    "vscode": "^1.115.0"
   },
   "categories": [
     "Programming Languages"
   ],
   "keywords": [
-    "regex",
     "regex+",
     "javascript",
     "typescript",
@@ -33,28 +32,56 @@
     "languages": [
       {
         "id": "regex+",
-        "extensions": [ ".regex+" ],
+        "extensions": [
+          ".regex+"
+        ],
         "configuration": "./languages/regex+.language-configuration.json"
       }
     ],
     "grammars": [
       {
         "language": "regex+",
-        "scopeName": "source.regex+",
-        "path": "./languages/syntaxes/regex+.json"
+        "scopeName": "text.regexplus",
+        "path": "./languages/grammars/regex+.tmLanguage.json"
       },
       {
-        "scopeName": "inline.regex+",
-        "path": "./languages/syntaxes/injection.json",
         "injectTo": [
-          "source.ts",
-          "source.tsx",
-          "source.js",
+          "source.ts"
+        ],
+        "scopeName": "text.embedded.ts.regexplus",
+        "path": "./languages/grammars/injection.ts.tmLanguage.json",
+        "embeddedLanguages": {
+          "meta.embedded.template.regexplus": "regex+"
+        }
+      },
+      {
+        "injectTo": [
+          "source.tsx"
+        ],
+        "scopeName": "text.embedded.tsx.regexplus",
+        "path": "./languages/grammars/injection.tsx.tmLanguage.json",
+        "embeddedLanguages": {
+          "meta.embedded.template.regexplus": "regex+"
+        }
+      },
+      {
+        "injectTo": [
+          "source.js"
+        ],
+        "scopeName": "text.embedded.js.regexplus",
+        "path": "./languages/grammars/injection.js.tmLanguage.json",
+        "embeddedLanguages": {
+          "meta.embedded.template.regexplus": "regex+"
+        }
+      },
+      {
+        "injectTo": [
           "source.jsx"
         ],
+        "scopeName": "text.embedded.jsx.regexplus",
+        "path": "./languages/grammars/injection.jsx.tmLanguage.json",
         "embeddedLanguages": {
-          "meta.template.expression.ts": "typescript",
-          "meta.template.expression.js": "javascript"
+          "meta.embedded.template.regexplus": "regex+"
         }
       }
     ]
@@ -85,10 +112,11 @@
     "testOnly": "echo \"Error: no test specified\" && exit 1",
     "prepublishOnly": "npm run buildOnly"
   },
-  "dependencies": {},
   "devDependencies": {
+    "@types/js-yaml": "^4.0.9",
     "@types/node": "^24.12.2",
     "@types/vscode": "^1.100.0",
+    "@vscode/vsce": "^3.9.0",
     "js-yaml": "^4.1.1",
     "regex": "^6.1.0",
     "rimraf": "^6.1.3",

@@ -1,5 +1,11 @@
 {
   "js/ts.tsdk.path": "node_modules\\typescript\\lib",
-  "debug.openDebug": "openOnDebugBreak",
-  "debug.console.closeOnEnd": true
+  "debug.openDebug": "neverOpen",
+  "yaml.schemas": {
+    "https://www.schemastore.org/tmlanguage.json": "source/grammars/*.tmLanguage.yaml"
+  },
+  "cSpell.enabledFileTypes": {
+    "yaml": true,
+    "json": true
+  }
 }
