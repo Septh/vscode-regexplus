@@ -2,7 +2,7 @@
 .vscode-test/**
 .gitignore
 .gitattributes
-docs/*.svg
+images/*.svg
 out/**
 script/**
 source/**

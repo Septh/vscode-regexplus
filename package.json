@@ -1,13 +1,14 @@
 {
   "name": "vscode-regexplus",
   "displayName": "Regex+",
-  "description": "Syntax highlighting for Regex+ tagged template strings.",
+  "description": "Syntax highlighting for Regex+ tagged templates.",
+  "homepage": "https://github.com/Septh/vscode-regexplus.git#readme",
   "publisher": "Septh",
   "author": {
     "name": "Stephan Schreiber"
   },
-  "version": "0.0.1",
-  "icon": "./docs/icon.png",
+  "version": "0.1.0",
+  "icon": "images/icon.png",
   "galleryBanner": {
     "color": "#fcfcfc",
     "theme": "light"
@@ -23,7 +24,6 @@
     "regex+",
     "javascript",
     "typescript",
-    "React",
     "regular",
     "expression"
   ],
@@ -86,6 +86,7 @@
     ]
   },
   "repository": {
+    "type": "git",
     "url": "https://github.com/Septh/vscode-regexplus.git"
   },
   "bugs": {
@@ -99,7 +100,7 @@
     "build:grammars": "node script/convert-grammars.mts",
     "watch:grammars": "node script/convert-grammars.mts --watch",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "vscode:prepublish": "npm run build"
+    "vscode:prepublish": "npm run build:grammars"
   },
   "devDependencies": {
     "@types/js-yaml": "^4.0.9",

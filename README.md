@@ -4,23 +4,22 @@ Visual Studio Code syntax highlighter for [Steve Levithan's Regex+ library](http
 
 <p>&nbsp;</p>
 
-![Regex+](./docs/logo.png)
+![Regex+](images/logo.png)
 
 <p>&nbsp;</p>
 
 
-## Features
-They say an image is worth a thousand words, so...:
+----
 
 <p>&nbsp;</p>
 
-![screenshot](./docs/screen.png)
+![screenshot](images/screen.png)
 
 
 ## Usage
-The extension adds highlighting out of the box for Regex+ template strings in JavaScript and TypeScript, including in their React flavours.
+This extension highlights Regex+ template strings in JavaScript and TypeScript source files, including their React flavours.
 
-You can also create and edit `.regex+` files. In this case, the whole file is considered a Regex+ regular expression source. This may help in writing very complex expressions that you can later copy and paste in your JS/TS code.
+You can also create and edit `.regex+` files, their full text is considered a regular expression source. This may help in writing very complex expressions that you can later copy and paste in your JS/TS code.
 
 
 ## Configuration
