@@ -21,11 +21,13 @@
     "Programming Languages"
   ],
   "keywords": [
+    "regex",
+    "regexp",
     "regex+",
-    "javascript",
-    "typescript",
     "regular",
-    "expression"
+    "expression",
+    "javascript",
+    "typescript"
   ],
   "contributes": {
     "languages": [
