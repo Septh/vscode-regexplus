@@ -1,9 +1,13 @@
 {
   "name": "vscode-regexplus",
   "displayName": "Regex+",
-  "description": "Highlighting for Regex+ template strings",
+  "description": "Syntax highlighting for Regex+ tagged template strings.",
+  "publisher": "Septh",
+  "author": {
+    "name": "Stephan Schreiber"
+  },
   "version": "0.0.1",
-  "icon": "./docs/regex+.png",
+  "icon": "./docs/icon.png",
   "galleryBanner": {
     "color": "#fcfcfc",
     "theme": "light"
@@ -19,14 +23,9 @@
     "regex+",
     "javascript",
     "typescript",
+    "React",
     "regular",
     "expression"
-  ],
-  "activationEvents": [
-    "onLanguage:javascript",
-    "onLanguage:javascriptreact",
-    "onLanguage:typescript",
-    "onLanguage:typescriptreact"
   ],
   "contributes": {
     "languages": [
@@ -87,30 +86,20 @@
     ]
   },
   "repository": {
-    "url": "https://github.com/Septh/vscode-regex.git"
+    "url": "https://github.com/Septh/vscode-regexplus.git"
   },
   "bugs": {
-    "url": "https://github.com/Septh/vscode-regex/issues"
+    "url": "https://github.com/Septh/vscode-regexplus/issues"
   },
-  "type": "commonjs",
-  "main": "./out/index.js",
-  "files": [
-    "./out",
-    "./languages",
-    "!*.map"
-  ],
   "scripts": {
-    "clean": "rimraf out dist languages/grammars",
+    "clean": "rimraf languages/grammars",
     "prebuild": "npm run clean",
     "build": "npm run buildOnly",
-    "buildOnly": "npm run build:js && npm run build:grammars",
-    "build:js": "tsc -p tsconfig.build.json",
+    "buildOnly": "npm run build:grammars",
     "build:grammars": "node script/convert-grammars.mts",
     "watch:grammars": "node script/convert-grammars.mts --watch",
-    "pretest": "npm run build",
-    "test": "npm run testOnly",
-    "testOnly": "echo \"Error: no test specified\" && exit 1",
-    "prepublishOnly": "npm run buildOnly"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "vscode:prepublish": "npm run build"
   },
   "devDependencies": {
     "@types/js-yaml": "^4.0.9",

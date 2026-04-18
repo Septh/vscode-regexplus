@@ -4,7 +4,7 @@ Visual Studio Code syntax highlighter for [Steve Levithan's Regex+ library](http
 
 <p>&nbsp;</p>
 
-![Regex+](docs/logo.png)
+![Regex+](./docs/logo.png)
 
 <p>&nbsp;</p>
 
@@ -14,7 +14,7 @@ They say an image is worth a thousand words, so...:
 
 <p>&nbsp;</p>
 
-![screenshot](docs/screen.png)
+![screenshot](./docs/screen.png)
 
 
 ## Usage
