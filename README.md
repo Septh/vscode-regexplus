@@ -1,65 +1,46 @@
-# regex README
+# Regex+
 
-This is the README for your extension "regex". After writing up a brief description, we recommend including the following sections.
+Visual Studio Code syntax highlighter for [Steve Levithan's Regex+ library](https://github.com/slevithan/regex), _"a template tag for readable, high-performance, native JS regexes with extended syntax, context-aware interpolation, and always-on best practices"_.
+
+<p>&nbsp;</p>
+
+![Regex+](docs/logo.png)
+
+<p>&nbsp;</p>
+
 
 ## Features
+They say an image is worth a thousand words, so...:
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+<p>&nbsp;</p>
 
-For example if there is an image subfolder under your extension project workspace:
+![screenshot](docs/screen.png)
 
-\!\[feature X\]\(images/feature-x.png\)
 
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+## Usage
+The extension adds highlighting out of the box for Regex+ template strings in JavaScript and TypeScript, including in their React flavours.
 
-## Requirements
+You can also create and edit `.regex+` files. In this case, the whole file is considered a Regex+ regular expression source. This may help in writing very complex expressions that you can later copy and paste in your JS/TS code.
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
 
-## Extension Settings
+## Configuration
+None yet.
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
-
-For example:
-
-This extension contributes the following settings:
-
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
 
 ## Known Issues
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+Although the full regular expression syntax Regex+ brings is supported, not all its features are yet implemented.
+
+For now, the following restrictions apply:
+
+- Only the `regex` and `regex(flags)` tagged templates are supported. The `regex(options_object)` variant and the `pattern` template are not.
+- You cannot rename the import, it has to be named `regex`.
+
+There is still work in progress and the missing features will be implemented gradually.
+
 
 ## Release Notes
 
-Users appreciate release notes as you update your extension.
-
 ### 1.0.0
 
-Initial release of ...
-
-### 1.0.1
-
-Fixed issue #.
-
-### 1.1.0
-
-Added features X, Y, and Z.
-
----
-
-## Working with Markdown
-
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
-
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
-
-## For more information
-
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+Initial release
