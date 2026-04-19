@@ -140,12 +140,12 @@ repository:
     patterns:
       - match: (\\[1-9](?=\D))
         name: variable.other.regexplus
-      - match: (\\k<)(\w*)(>)     # TODO(Septh): \w is incorrect, could be any JS identifier
+      - match: (\\k<)([$_\p{IDS}][$\u200C\u200D\p{IDC}]*)?(>)
         captures:
           1: { name: keyword.other.regexplus }
           2: { name: variable.other.regexplus }
           3: { name: keyword.other.regexplus }
-      - match: (\\g<)(\w*)(>)     # TODO(Septh): \w is incorrect, could be any JS identifier
+      - match: (\\g<)([$_\p{IDS}][$\u200C\u200D\p{IDC}]*)?(>)
         captures:
           1: { name: keyword.other.regexplus }
           2: { name: entity.name.function.regexplus }
@@ -202,7 +202,7 @@ repository:
 
   named-capturing-group:
     name: meta.group.regexplus
-    begin: (\(\?<)(\w+)(>)    # TODO(Septh): \w is incorrect, could be any JS identifier
+    begin: (\(\?<)([$_\p{IDS}][$\u200C\u200D\p{IDC}]*)?(>)
     beginCaptures:
       1: { name: punctuation.definition.group.regexp }
       2: { name: variable.other.constant.regexplus }
