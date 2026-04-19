@@ -164,22 +164,23 @@ repository:
           3: { name: keyword.other.regexplus }
 
   modifiers:
+    begin: (\(\?)(?=[-ims]+[^\n]*\))     # Enforce single line despite the begin/end construct
+    end: (\))
+    name: meta.group.modifiers.regexplus
+    captures:
+      1: { name: punctuation.definition.group.regexp }
     patterns:
       # Matches the '-ims' form.
-      - match: (?x) (\(\?) (-[ims]*) (\))
+      - match: (-[ims]+)([^ims)]*)
         captures:
-          1: { name: punctuation.definition.group.regexp }
-          2: { name: keyword.other.regexplus }
-          3: { name: punctuation.definition.group.regexp }
+          1: { name: constant.language.regexplus }
+          2: { name: invalid.illegal }
       # Matches the 'ims' and 'ims-ims' forms.
-      - match: (?x) (\(\?) ([ims]+(?:-[ims]*)?) (\))
+      - match: ([ims]+)(-[ims]+)?([^)]*)
         captures:
-          1: { name: punctuation.definition.group.regexp }
-          2: { name: keyword.other.regexplus }
-          3: { name: punctuation.definition.group.regexp }
-      # Anything else is invalid.
-      - match: \S
-        name: invalid.illegal
+          1: { name: constant.language.regexplus }
+          2: { name: constant.language.regexplus }
+          3: { name: invalid.illegal }
 
   group:
     patterns:
@@ -189,6 +190,9 @@ repository:
       - include: '#named-capturing-group'
       - include: '#subroutine-definition-group'
       - include: '#simple-capturing-group'
+      - begin: \(\?
+        end: \)
+        name: invalid.illegal
 
   atomic-group:
     # https://github.com/slevithan/regex/tree/main#atomic-groups
