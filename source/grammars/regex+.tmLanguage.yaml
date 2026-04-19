@@ -100,15 +100,27 @@ repository:
 
   character-class-escape:
     match: \\[sSdDwW]
-    name: constant.character.escape.regexplus
-    captures:
-      0: { name: support.class.regexplus }
+    name: support.class.regexplus
 
+  # https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Regular_expressions/Unicode_character_class_escape
   unicode-character-class-escape:
-    match: (\\[pP])\{\w*(?:=\w*)?\}
-    name: constant.character.escape.regexplus
-    captures:
-      1: { name: support.class.regexplus }
+    begin: \\[pP]\{(?=[^\n]*\})     # Enforce single line despite the begin/end construct
+    end: \}
+    name: support.class.regexplus
+    contentName: string.regexplus   # For themes that don't support support.property-name/value
+    patterns:
+      # Matches {LoneProperty}
+      - match: \w+(?=\})
+        captures:
+          0: { name: support.property-value }
+      # Matches {property=value}
+      - match: (\w+)(=)(\w+)(?=\})
+        captures:
+          1: { name: support.property-name }
+          2: { name: keyword.operator.assignment }
+          3: { name: support.property-value }
+      - match: '[^}]'
+        name: invalid.illegal
 
   character-class:
     begin: \[\s*(\^)?
