@@ -16,7 +16,7 @@
       "option": "watch",
       "problemMatcher": "$tsc-watch",
       // "dependsOn": "clean",
-      // "dependsOrder": "sequence",
+      "dependsOrder": "sequence",
       "presentation": {
         "group": "X"
       }
@@ -25,19 +25,13 @@
       "label": "build:grammars",
       "type": "shell",
       "command": "node",
-      "args": [ "${workspaceFolder}/script/convert-grammarS.mts", "--watch" ],
+      "args": [ "${workspaceFolder}/script/convert-grammars.mts", "--watch" ],
       // "dependsOn": "clean",
-      // "dependsOrder": "sequence",
-      "isBackground": true,
+      "dependsOrder": "sequence",
       "presentation": {
         "group": "X"
-      }
-    },
-    {
-      "label": "build:all",
-      "hide": true,
-      "dependsOn": [ "build:code", "build:grammars" ],
-      "dependsOrder": "parallel"
+      },
+      "problemMatcher": []
     },
     {
       "label": "build",
@@ -45,8 +39,8 @@
         "kind": "build",
         "isDefault": true
       },
-      "dependsOn": "build:all",
-      "dependsOrder": "sequence"
+      "dependsOn": [ "build:code", "build:grammars" ],
+      "dependsOrder": "parallel"
     }
   ]
 }
