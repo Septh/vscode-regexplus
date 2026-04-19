@@ -47,8 +47,8 @@ try {
             console.log('Writing', styleText('blue', displayName(outputFile)))
             await fs.writeFile(outputFile, json)
         }
-        else if (filename === 'injection.tmLanguage.yaml') {
-            // One source, four files.
+        else if (filename === 'injections.tmLanguage.yaml') {
+            // One source to inject them all.
             for (const ext of [ "ts", "tsx", "js", "jsx" ]) {
                 const replaced = raw.replaceAll('$host-language$', ext)
                 const parsed = yaml.load(replaced, { filename })
