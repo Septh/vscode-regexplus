@@ -152,16 +152,22 @@ repository:
           3: { name: keyword.other.regexplus }
 
   modifiers:
-    begin: \(\?(?![>=!<:(])
-    end: \)
-    name: punctuation.definition.group.regexp
     patterns:
       # Matches the '-ims' form.
-      - match: -([ims])+(?=\s*\))
-        name: constant.language.regexplus
+      - match: (?x) (\(\?) (-[ims]*) (\))
+        captures:
+          1: { name: punctuation.definition.group.regexp }
+          2: { name: keyword.other.regexplus }
+          3: { name: punctuation.definition.group.regexp }
       # Matches the 'ims' and 'ims-ims' forms.
-      - match: ([ims])+(?:-[ims]*)?(?=\s*\))
-        name: constant.language.regexplus
+      - match: (?x) (\(\?) ([ims]+(?:-[ims]*)?) (\))
+        captures:
+          1: { name: punctuation.definition.group.regexp }
+          2: { name: keyword.other.regexplus }
+          3: { name: punctuation.definition.group.regexp }
+      # Anything else is invalid.
+      - match: \S
+        name: invalid.illegal
 
   group:
     patterns:
