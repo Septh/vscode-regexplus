@@ -155,7 +155,7 @@ repository:
       - match: (\\k<)([$_\p{IDS}][$\u200C\u200D\p{IDC}]*)?(>)
         captures:
           1: { name: keyword.other.regexplus }
-          2: { name: variable.other.regexplus }
+          2: { name: variable.other.constant.regexplus }
           3: { name: keyword.other.regexplus }
       - match: (\\g<)([$_\p{IDS}][$\u200C\u200D\p{IDC}]*)?(>)
         captures:
