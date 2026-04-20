@@ -96,7 +96,7 @@ repository:
               2: { name: keyword.operator.separator.regexplus }
               3: { name: constant.numeric.regexplus }
           - match: \S
-            name: invalid.illegal
+            name: invalid.illegal.regexplus
 
   character-class-escape:
     match: \\[sSdDwW]
@@ -120,7 +120,7 @@ repository:
           2: { name: keyword.operator.assignment }
           3: { name: support.property-value }
       - match: '[^}]'
-        name: invalid.illegal
+        name: invalid.illegal.regexplus
 
   character-class:
     begin: \[\s*(\^)?
@@ -134,7 +134,7 @@ repository:
       - include: '#character-escape'
       - include: '#character-class-escape'  # Note: no unicode, \p is not valid inside character classes.
       - match: \\[pP]
-        name: invalid.illegal
+        name: invalid.illegal.regexplus
       - begin: \\q\{
         end: \}
         name: punctuation.definition.character-class.regexp
@@ -174,13 +174,13 @@ repository:
       - match: (-[ims]+)([^ims)]*)
         captures:
           1: { name: constant.language.regexplus }
-          2: { name: invalid.illegal }
+          2: { name: invalid.illegal.regexplus }
       # Matches the 'ims' and 'ims-ims' forms.
       - match: ([ims]+)(-[ims]+)?([^)]*)
         captures:
           1: { name: constant.language.regexplus }
           2: { name: constant.language.regexplus }
-          3: { name: invalid.illegal }
+          3: { name: invalid.illegal.regexplus }
 
   group:
     patterns:
@@ -192,7 +192,7 @@ repository:
       - include: '#simple-capturing-group'
       - begin: \(\?
         end: \)
-        name: invalid.illegal
+        name: invalid.illegal.regexplus
 
   atomic-group:
     # https://github.com/slevithan/regex/tree/main#atomic-groups
