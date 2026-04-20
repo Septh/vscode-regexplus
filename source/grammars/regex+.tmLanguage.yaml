@@ -56,8 +56,11 @@ repository:
 
   line-comment:
     # https://github.com/slevithan/regex/tree/main#flag-x
-    match: '#[^\n]*'
+    begin: '#'
+    end: $
     name: comment.line.number-sign.regexplus
+    beginCaptures:
+      0: { name: punctuation.definition.comment.regexplus }
 
   boundary-assertion:
     match: \^|\$|\\[bB]
