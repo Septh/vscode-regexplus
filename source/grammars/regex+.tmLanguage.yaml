@@ -29,7 +29,7 @@ repository:
         name: string.regexp
 
   token-escape:
-    match: '(?x)\\[ \\ \[ \] () {} # | ^ $ / ]'
+    match: '(?x)\\[ \\ \[ \] () {} # | ^ $ / `]'
     name: constant.character.escape.regexplus
 
   character-escape:
@@ -168,7 +168,7 @@ repository:
 
   modifiers:
     begin: (\(\?)(?=[-ims]+[^\n]*\))     # Enforce single line despite the begin/end construct
-    end: (\))
+    end: (\))|(?<=`)
     name: meta.group.modifiers.regexplus
     captures:
       1: { name: punctuation.definition.group.regexp }
@@ -194,14 +194,14 @@ repository:
       - include: '#subroutine-definition-group'
       - include: '#simple-capturing-group'
       - begin: \(\?
-        end: \)
+        end: \)|(?<=`)
         name: invalid.illegal.regexplus
 
   atomic-group:
     # https://github.com/slevithan/regex/tree/main#atomic-groups
     name: meta.group.atomic.regexplus
     begin: \(\?>
-    end: \)
+    end: \)|(?<=`)
     captures:
       0: { name: punctuation.definition.group.regexp }  # Same as JS/TS
     patterns:
@@ -210,7 +210,7 @@ repository:
   look-around:
     name: meta.group.look-around.regexplus
     begin: \(\?(?:=|!|<=|<!)
-    end: \)
+    end: \)|(?=\$|{)
     captures:
       0: { name: punctuation.definition.group.regexp }  # Same as JS/TS
     patterns:
@@ -219,7 +219,7 @@ repository:
   non-capturing-group:
     name: meta.group.non-capturing.regexplus
     begin: '\(\?:'
-    end: \)
+    end: \)|(?<=`)
     captures:
       0: { name: punctuation.definition.group.regexp }  # Same as JS/TS
     patterns:
@@ -232,7 +232,7 @@ repository:
       1: { name: punctuation.definition.group.regexp }  # Same as JS/TS
       2: { name: variable.other.constant.regexplus }
       3: { name: punctuation.definition.group.regexp }  # Same as JS/TS
-    end: \)
+    end: \)|(?<=`)
     endCaptures:
       0: { name: punctuation.definition.group.regexp }  # Same as JS/TS
     patterns:
@@ -241,7 +241,7 @@ repository:
   subroutine-definition-group:
     name: meta.group.regexplus
     begin: \(\?\((DEFINE)\)
-    end: \)
+    end: \)|(?<=`)
     captures:
       0: { name: punctuation.definition.group.regexp }  # Same as JS/TS
       1: { name: support.function.regexp }
@@ -251,7 +251,7 @@ repository:
   simple-capturing-group:
     name: meta.group.regexplus
     begin: \((?!\?)
-    end: \)
+    end: \)|(?<=`)
     captures:
       0: { name: punctuation.definition.group.regexp }  # Same as JS/TS
     patterns:
