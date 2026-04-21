@@ -149,7 +149,7 @@ repository:
 
   # https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Regular_expressions/Modifier
   modifiers:
-    begin: \(\?(?=[-ims])
+    begin: \(\?(?=[-a-z])
     end: \)
     name: meta.group.modifiers.regexplus
     captures:
