@@ -32,57 +32,60 @@
   "contributes": {
     "languages": [
       {
-        "id": "regex+",
+        "id": "regexplus",
+        "aliases": [
+          "Regex+"
+        ],
         "extensions": [
           ".regex+"
         ],
-        "configuration": "./languages/regex+.language-configuration.json"
+        "configuration": "./languages/regexplus.language-configuration.json"
       }
     ],
     "grammars": [
       {
-        "language": "regex+",
+        "language": "regexplus",
         "scopeName": "text.regexplus",
-        "path": "./languages/grammars/regex+.tmLanguage.json"
+        "path": "./languages/grammars/regexplus.tmLanguage.json"
       },
       {
+        "scopeName": "text.embedded.ts.regexplus",
         "injectTo": [
           "source.ts"
         ],
-        "scopeName": "text.embedded.ts.regexplus",
         "path": "./languages/grammars/injection.ts.tmLanguage.json",
         "embeddedLanguages": {
-          "meta.embedded.template.regexplus": "regex+"
+          "meta.embedded.ts.regexplus": "regexplus"
         }
       },
       {
+        "scopeName": "text.embedded.tsx.regexplus",
         "injectTo": [
           "source.tsx"
         ],
-        "scopeName": "text.embedded.tsx.regexplus",
         "path": "./languages/grammars/injection.tsx.tmLanguage.json",
         "embeddedLanguages": {
-          "meta.embedded.template.regexplus": "regex+"
+          "meta.embedded.tsx.regexplus": "regexplus"
         }
       },
       {
+        "scopeName": "text.embedded.js.regexplus",
         "injectTo": [
           "source.js"
         ],
-        "scopeName": "text.embedded.js.regexplus",
         "path": "./languages/grammars/injection.js.tmLanguage.json",
         "embeddedLanguages": {
-          "meta.embedded.template.regexplus": "regex+"
+          "meta.embedded.js.regexplus": "regexplus"
         }
       },
       {
+        "scopeName": "text.embedded.js.jsx.regexplus",
         "injectTo": [
           "source.jsx"
         ],
-        "scopeName": "text.embedded.jsx.regexplus",
         "path": "./languages/grammars/injection.jsx.tmLanguage.json",
         "embeddedLanguages": {
-          "meta.embedded.template.regexplus": "regex+"
+          "meta.embedded.js.jsx.regexplus": "regexplus"
         }
       }
     ]

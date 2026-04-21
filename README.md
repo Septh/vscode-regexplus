@@ -8,7 +8,6 @@ Visual Studio Code syntax highlighter for [Steve Levithan's Regex+ library](http
 
 <p>&nbsp;</p>
 
-
 ----
 
 <p>&nbsp;</p>
@@ -19,7 +18,13 @@ Visual Studio Code syntax highlighter for [Steve Levithan's Regex+ library](http
 ## Usage
 This extension highlights Regex+ template strings in JavaScript and TypeScript source files, including their React flavours.
 
-You can also create and edit `.regex+` files, their full text is considered a regular expression source. This may help in writing very complex expressions that you can later copy and paste in your JS/TS code.
+You can also create and edit `.regex+` files, their full text is considered a regular expression source. This may help in writing very complex expressions that you can later copy and paste in your JS/TS code (or even read it from disk and feed it to Regex+'s `pattern` utility).
+
+Be sure to [read the docs](https://github.com/slevithan/regex#readme) if you're not familiar with Regex+.
+
+Regex+ is an astonishing piece of software. I highly recommend it you want to be serious about regexes.
+
+![screenshot](https://raw.githubusercontent.com/Septh/vscode-regexplus/refs/heads/main/images/screen2.png)
 
 
 ## Configuration
@@ -32,14 +37,15 @@ Although the full regular expression syntax Regex+ brings is supported, not all 
 
 For now, the following restrictions apply:
 
-- Only the `regex` and `regex(flags)` tagged templates are supported. The `regex(options_object)` variant and the `pattern` template are not.
-- You cannot rename the import, it has to be named `regex`.
+- Only the `regex`, `regex(flags)` and `pattern` tagged templates are supported. The `regex(optionsObject)` variant and the `rewrite` utility are not.
+- Only the main Regex+ package is supported. Support for [the recursion plugin](https://github.com/slevithan/regex-recursion) is not.
+- You cannot rename the imports, they have to be named `regex` and `pattern`.
 
 There is still work in progress and the missing features will be implemented gradually.
 
 
 ## Release Notes
 
-### 1.0.0
+### 1.0.2
 
-Initial release
+Buf fixes and improvements.
