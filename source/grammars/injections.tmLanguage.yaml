@@ -58,7 +58,7 @@ repository:
   injections:
     patterns:
       - include: '#injected-host-language-stuff'
-      - include: text.regexplus#common-rules
+      - include: text.regexplus#shared-rules
       # When injecting Regex+, we use a few local, custom rules
       # rather than those defined in the main language file.
       - include: '#injected-quantifier-min-max'
@@ -71,7 +71,7 @@ repository:
 
   injected-host-language-stuff:
     patterns:
-      # Allow ${...} interpolation
+      # Allow ${...} substitution
       - include: source.HOST_LANGUAGE#template-substitution-element
       # Catch escaped backticks
       - match: \\`
@@ -92,7 +92,7 @@ repository:
     begin: \\[pP]\{
     end: \}|(?=`)
     name: support.class.regexplus
-    contentName: string.regexplus   # For themes that don't have support.constant
+    contentName: string.regexp   # For themes that don't have support.constant
     patterns:
       - include: '#injected-host-language-stuff'
       - include: text.regexplus#unicode-character-class-escape-contents

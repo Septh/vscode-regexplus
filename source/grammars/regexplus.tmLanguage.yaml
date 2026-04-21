@@ -8,7 +8,7 @@ patterns:
 repository:
 
   # These rules are common to .regex+ files and injections.
-  common-rules:
+  shared-rules:
     patterns:
       - include: '#syntax-escape'
       - include: '#character-escape'
@@ -22,13 +22,17 @@ repository:
       - include: '#modifiers'
 
   # These are not.
-  all-rules:
+  local-rules:
     patterns:
-      - include: '#common-rules'
       - include: '#quantifier-min-max'
       - include: '#unicode-character-class-escape'
       - include: '#character-class'
       - include: '#group'
+
+  all-rules:
+    patterns:
+      - include: '#shared-rules'
+      - include: '#local-rules'
       - match: \S
         name: string.regexp
 
@@ -115,7 +119,7 @@ repository:
     begin: \\[pP]\{
     end: \}
     name: support.class.regexplus
-    contentName: string.regexplus   # For themes that don't have support.constant
+    contentName: string.regexp   # For themes that don't have support.constant
     patterns:
       - include: '#unicode-character-class-escape-contents'
   unicode-character-class-escape-contents:
@@ -123,7 +127,7 @@ repository:
       - match: \w+
         name: support.constant.regexplus
       - match: =
-        name: keyword.operator.assignment
+        name: keyword.operator.assignment.regexplus
       - match: \S
         name: invalid.illegal.regexplus
 
@@ -168,7 +172,7 @@ repository:
       - include: '#character-class-contents'
   character-class-contents:
     patterns:
-      - include: '#token-escape'
+      - include: '#syntax-escape'
       - include: '#character-escape'
       - include: '#character-class-escape'
       - include: '#unicode-character-class-escape'
@@ -177,7 +181,7 @@ repository:
         name: punctuation.definition.character-class.regexp
         contentName: string.regexp
         patterns:
-          - include: '#token-escape'
+          - include: '#syntax-escape'
           - include: '#character-escape'
           - include: '#disjunction'
       - match: --|&&
@@ -218,7 +222,7 @@ repository:
       - include: '#all-rules'
 
   non-capturing-group:
-    name: meta.group.non-capturing.regexplus
+    name: meta.group.no-capture.regexplus
     begin: '\(\?:'
     end: \)
     captures:
@@ -227,7 +231,7 @@ repository:
       - include: '#all-rules'
 
   named-capturing-group:
-    name: meta.group.capturing.regexplus
+    name: meta.group.named-capture.regexplus
     begin: (\(\?<)([$_\p{ID_Start}][$\u200C\u200D\p{ID_Continue}]*)?(>)
     beginCaptures:
       1: { name: punctuation.definition.group.regexp }  # Same as JS/TS
@@ -240,7 +244,7 @@ repository:
       - include: '#all-rules'
 
   subroutine-definition-group:
-    name: meta.group.regexplus
+    name: meta.group.subroutine-definition.regexplus
     begin: \(\?\((DEFINE)\)
     end: \)
     captures:
