@@ -4,6 +4,9 @@
   "yaml.schemas": {
     "https://www.schemastore.org/tmlanguage.json": "source/grammars/*.tmLanguage.yaml"
   },
+  "files.associations": {
+    "/source/grammars/*.yaml": "yaml"
+  },
   "cSpell.enabledFileTypes": {
     "yaml": true,
     "json": true
