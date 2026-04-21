@@ -4,7 +4,7 @@ Visual Studio Code syntax highlighter for [Steve Levithan's Regex+ library](http
 
 <p>&nbsp;</p>
 
-![Regex+](https://raw.githubusercontent.com/Septh/vscode-regexplus/refs/heads/main/images/logo.png)
+![Regex+](images/logo.png)
 
 <p>&nbsp;</p>
 
@@ -12,7 +12,7 @@ Visual Studio Code syntax highlighter for [Steve Levithan's Regex+ library](http
 
 <p>&nbsp;</p>
 
-![screenshot](https://raw.githubusercontent.com/Septh/vscode-regexplus/refs/heads/main/images/screen.png)
+![screenshot](images/screen.png)
 
 
 ## Usage
@@ -24,7 +24,7 @@ Be sure to [read the docs](https://github.com/slevithan/regex#readme) if you're 
 
 Regex+ is an astonishing piece of software. I highly recommend it you want to be serious about regexes.
 
-![screenshot](https://raw.githubusercontent.com/Septh/vscode-regexplus/refs/heads/main/images/screen2.png)
+![screenshot](images/screen2.png)
 
 
 ## Configuration

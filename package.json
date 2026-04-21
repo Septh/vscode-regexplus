@@ -39,7 +39,11 @@
         "extensions": [
           ".regex+"
         ],
-        "configuration": "./languages/regexplus.language-configuration.json"
+        "configuration": "./languages/regexplus.language-configuration.json",
+        "icon": {
+          "dark": "./images/file-icon.svg",
+          "light": "./images/file-icon.svg"
+        }
       }
     ],
     "grammars": [

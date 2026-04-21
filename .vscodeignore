@@ -3,9 +3,10 @@
 .gitignore
 .gitattributes
 .npmrc
-images/*.svg
+images/logo.png
+images/screen*.png
 out/**
 script/**
 source/**
 tsconfig*
-vsc-extension-quickstart.md
+**/zz_*
