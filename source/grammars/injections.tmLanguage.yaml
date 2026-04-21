@@ -101,7 +101,6 @@ repository:
     begin: \[\^?
     end: \]|(?=`)
     name: meta.character-class.regexplus
-    contentName: string.regexp
     captures:
       0: { name: punctuation.definition.character-class.regexp }  # Same as TS/JS
     patterns:

@@ -165,7 +165,6 @@ repository:
     begin: \[\^?
     end: \]
     name: meta.character-class.regexplus
-    contentName: string.regexp
     captures:
       0: { name: punctuation.definition.character-class.regexp }  # Same as TS/JS
     patterns:
@@ -189,6 +188,8 @@ repository:
       - include: '#quantifier-short'
       - include: '#quantifier-min-max'
       - include: '#character-class'         # Recursive
+      - match: \S
+        name: string.regexp
 
   group:
     patterns:
