@@ -46,7 +46,7 @@ try {
         console.group('Converting', styleText('yellow', displayName(sourceFile)))
 
         const raw = await fs.readFile(sourceFile, 'utf-8')
-        if (filename === 'regexplus.tmLanguage.yaml') {
+        if (filename === 'regexplus.tm.yaml') {
             // Doing a straight read/convert/write for the main language file.
             const parsed = yaml.load(raw, { filename })
             const json = JSON.stringify(parsed, undefined, 2)
@@ -55,7 +55,7 @@ try {
             console.log('Writing', styleText('blue', displayName(outputFile)))
             await fs.writeFile(outputFile, json)
         }
-        else if (filename === 'injections.tmLanguage.yaml') {
+        else if (filename === 'injections.tm.yaml') {
             // One source to inject them all.
             for (const [ extension, language ] of Object.entries(LANGUAGES)) {
                 const replaced = raw.replaceAll(HOST_LANGUAGE_MARK, language)
