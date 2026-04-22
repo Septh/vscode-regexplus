@@ -17,7 +17,10 @@ let signal: AbortSignal | undefined = undefined
 
 debugger
 try {
-    console.log('Reading source directory', styleText('yellow', displayName(sourceDir)))
+    console.log(displayTime(), 'Cleaning output directory', styleText('yellow', displayName(outputDir)))
+    await fs.rm(outputDir, { recursive: true }).catch((err: NodeJS.ErrnoException) => console.log(`Failed: ${err.code}`))
+
+    console.log(displayTime(), 'Reading source directory', styleText('yellow', displayName(sourceDir)))
     await fs.mkdir(outputDir, { recursive: true })
     for await (const filename of fs.glob('*.yaml', { cwd: sourceDir }))
         await convert(filename)
@@ -43,7 +46,7 @@ try {
 
     async function convert(filename: string) {
         const sourceFile = path.join(sourceDir, filename)
-        console.group('Converting', styleText('yellow', displayName(sourceFile)))
+        console.group(displayTime(), 'Converting', styleText('yellow', displayName(sourceFile)))
 
         const raw = await fs.readFile(sourceFile, 'utf-8')
         if (filename === 'regexplus.tm.yaml') {
@@ -68,6 +71,10 @@ try {
             }
         }
         console.groupEnd()
+    }
+
+    function displayTime() {
+        return styleText('gray', `[${new Date().toLocaleTimeString()}]`)
     }
 
     function displayName(filename: string) {
