@@ -58,6 +58,20 @@ patterns:
     patterns:
       - include: '#injections'
 
+  # /* regex */`...` (comment prefix)
+  - begin: (\/\*)(\s*regex\s*)(\*\/)\s*(`)
+    end: (`)
+    beginCaptures:
+      1: { name: comment.block.HOST_LANGUAGE punctuation.definition.comment.HOST_LANGUAGE }
+      2: { name: comment.block.HOST_LANGUAGE }
+      3: { name: comment.block.HOST_LANGUAGE punctuation.definition.comment.HOST_LANGUAGE }
+      4: { name: string.template.HOST_LANGUAGE punctuation.definition.string.template.begin.HOST_LANGUAGE }
+    endCaptures:
+      1: { name: string.template.HOST_LANGUAGE punctuation.definition.string.template.end.HOST_LANGUAGE }
+    contentName: string.template.HOST_LANGUAGE meta.embedded.HOST_LANGUAGE.regexplus
+    patterns:
+      - include: '#injections'
+
 repository:
   flags:
     patterns:
