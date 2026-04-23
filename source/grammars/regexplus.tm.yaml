@@ -36,13 +36,15 @@ repository:
       - match: \S
         name: string.regexp
 
+  # https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Regular_expressions/Character_escape
+  # With '#' added
   syntax-escape:
-    match: '(?x)\\ [ \\ \[ \] () {} # | ^ $ / ]'
+    match: '(?x)\\ [ \^ \$ \\ \. \* \+ \? \( \) \[ \] \{ \} \| \/ \# ]'
     name: constant.character.escape.regexplus
 
   character-escape:
     patterns:
-      - match: \\[fnrtv0]
+      - match: \\[fnrtv0]   # cSpell:disable-line
         name: constant.character.escape.regexplus
       - match: \[\\b\]
         name: constant.character.escape.regexplus
