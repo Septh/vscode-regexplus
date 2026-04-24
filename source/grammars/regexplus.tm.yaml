@@ -16,15 +16,15 @@ repository:
       - include: '#boundary-assertion'
       - include: '#disjunction'
       - include: '#wildcard'
-      - include: '#quantifier-short'
       - include: '#character-class-escape'
       - include: '#backreference'
-      - include: '#modifiers'
+      - include: '#quantifier-short'
 
-  # These are not.
+  # These are not: injections need to redefine them.
   local-rules:
     patterns:
       - include: '#quantifier-min-max'
+      - include: '#modifiers'
       - include: '#unicode-character-class-escape'
       - include: '#character-class'
       - include: '#group'
@@ -84,6 +84,27 @@ repository:
     match: \.
     name: keyword.operator.or.regexp    # Same as TS/JS's |
 
+  # https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Regular_expressions/Character_class_escape
+  character-class-escape:
+    match: \\[sSdDwW]
+    name: support.class.regexplus
+
+  # https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Regular_expressions/Backreference
+  backreference:
+    patterns:
+      - match: \\[1-9]
+        name: variable.other.regexplus
+      - match: (\\k<)([$_\p{ID_Start}][$\u200C\u200D\p{ID_Continue}]*)?(>)
+        captures:
+          1: { name: keyword.other.regexplus }
+          2: { name: variable.other.constant.regexplus }
+          3: { name: keyword.other.regexplus }
+      - match: (\\g<)([$_\p{ID_Start}][$\u200C\u200D\p{ID_Continue}]*)?(>)
+        captures:
+          1: { name: keyword.other.regexplus }
+          2: { name: entity.name.function.regexplus }
+          3: { name: keyword.other.regexplus }
+
   # https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Regular_expressions/Quantifier
   # https://github.com/slevithan/regex/tree/main#possessive-quantifiers
   quantifier-short:
@@ -111,10 +132,27 @@ repository:
       - match: \S
         name: invalid.illegal.regexplus
 
-  # https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Regular_expressions/Character_class_escape
-  character-class-escape:
-    match: \\[sSdDwW]
-    name: support.class.regexplus
+  # https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Regular_expressions/Modifier
+  modifiers:
+    begin: \(\?(?=[-a-z])
+    end: \)
+    name: meta.group.modifiers.regexplus
+    captures:
+      0: { name: punctuation.definition.group.regexp }
+    patterns:
+      - include: '#modifiers-contents'
+  modifiers-contents:
+    patterns:
+      - match: '[-ims]+'
+        name: constant.language.regexplus
+      - begin: ':'
+        end: (?=\))
+        beginCaptures:
+          0: { name: keyword.operator.or.regexp }
+        patterns:
+          - include: '#all-rules'
+      - match: \S
+        name: invalid.illegal.regexplus
 
   # https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Regular_expressions/Unicode_character_class_escape
   unicode-character-class-escape:
@@ -130,35 +168,6 @@ repository:
         name: support.constant.regexplus
       - match: =
         name: keyword.operator.assignment.regexplus
-      - match: \S
-        name: invalid.illegal.regexplus
-
-  # https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Regular_expressions/Backreference
-  backreference:
-    patterns:
-      - match: \\[1-9]
-        name: variable.other.regexplus
-      - match: (\\k<)([$_\p{ID_Start}][$\u200C\u200D\p{ID_Continue}]*)?(>)
-        captures:
-          1: { name: keyword.other.regexplus }
-          2: { name: variable.other.constant.regexplus }
-          3: { name: keyword.other.regexplus }
-      - match: (\\g<)([$_\p{ID_Start}][$\u200C\u200D\p{ID_Continue}]*)?(>)
-        captures:
-          1: { name: keyword.other.regexplus }
-          2: { name: entity.name.function.regexplus }
-          3: { name: keyword.other.regexplus }
-
-  # https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Regular_expressions/Modifier
-  modifiers:
-    begin: \(\?(?=[-a-z])
-    end: \)
-    name: meta.group.modifiers.regexplus
-    captures:
-      0: { name: punctuation.definition.group.regexp }
-    patterns:
-      - match: '[-ims]+'
-        name: constant.language.regexplus
       - match: \S
         name: invalid.illegal.regexplus
 
@@ -217,8 +226,8 @@ repository:
 
   look-around:
     name: meta.group.look-around.regexplus
-    begin: \(\?(?:=|!|<=|<!)
-    end: \)|(?=\$|{)
+    begin: (?x) \(\? <?[=!]
+    end: \)
     captures:
       0: { name: punctuation.definition.group.regexp }  # Same as JS/TS
     patterns:

@@ -27,7 +27,7 @@ patterns:
       4:
         name: string.quoted.single.HOST_LANGUAGE
         patterns:
-        - include: '#flags'
+        - include: '#function-flags'
       5: { name: string.quoted.single.HOST_LANGUAGE punctuation.definition.string.end.HOST_LANGUAGE }
       6: { name: meta.brace.round.HOST_LANGUAGE }
       7: { name: string.template.HOST_LANGUAGE punctuation.definition.string.template.begin.HOST_LANGUAGE }
@@ -48,7 +48,7 @@ patterns:
       4:
         name: string.quoted.double.HOST_LANGUAGE
         patterns:
-        - include: '#flags'
+        - include: '#function-flags'
       5: { name: string.quoted.double.HOST_LANGUAGE punctuation.definition.string.end.HOST_LANGUAGE }
       6: { name: meta.brace.round.HOST_LANGUAGE }
       7: { name: string.template.HOST_LANGUAGE punctuation.definition.string.template.begin.HOST_LANGUAGE }
@@ -73,7 +73,7 @@ patterns:
       - include: '#injections'
 
 repository:
-  flags:
+  function-flags:
     patterns:
     - match: ([dgmsy]+)
       name: constant.language.regexplus
@@ -82,25 +82,35 @@ repository:
 
   injections:
     patterns:
-      - include: '#injected-host-language-stuff'
+      - include: '#host-language-stuff'
       - include: text.regexplus#shared-rules
       # When injecting Regex+, we use a few local, custom rules
       # rather than those defined in the main language file.
+      - include: '#injected-modifiers'
       - include: '#injected-quantifier-min-max'
       - include: '#injected-unicode-character-class-escape'
       - include: '#injected-character-class'
       - include: '#injected-group'
       - match: \S
         name: string.regexp
-        # name: invalid.test.regexplus
 
-  injected-host-language-stuff:
+  host-language-stuff:
     patterns:
-      # Allow ${...} substitution
+      # Allow ${...} substitution in template string
       - include: source.HOST_LANGUAGE#template-substitution-element
       # Catch escaped backticks
       - match: \\`
         name: constant.character.escape.regexplus
+
+  injected-modifiers:
+    begin: \(\?(?=[-a-z])
+    end: \)|(?=`)
+    name: meta.group.modifiers.regexplus
+    captures:
+      0: { name: punctuation.definition.group.regexp }
+    patterns:
+      - include: '#host-language-stuff'
+      - include: 'text.regexplus#modifiers-contents'
 
   injected-quantifier-min-max:
     patterns:
@@ -110,7 +120,7 @@ repository:
         captures:
           0: { name: keyword.operator.quantifier.regexp }   # Same as TS/JS
         patterns:
-          - include: '#injected-host-language-stuff'
+          - include: '#host-language-stuff'
           - include: text.regexplus#quantifier-min-max-contents
 
   injected-unicode-character-class-escape:
@@ -119,7 +129,7 @@ repository:
     name: support.class.regexplus
     contentName: string.regexp   # For themes that don't have support.constant
     patterns:
-      - include: '#injected-host-language-stuff'
+      - include: '#host-language-stuff'
       - include: text.regexplus#unicode-character-class-escape-contents
 
   injected-character-class:
@@ -129,7 +139,7 @@ repository:
     captures:
       0: { name: punctuation.definition.character-class.regexp }  # Same as TS/JS
     patterns:
-      - include: '#injected-host-language-stuff'
+      - include: '#host-language-stuff'
       - include: text.regexplus#character-class-contents
 
   injected-group:
@@ -155,7 +165,7 @@ repository:
 
   injected-look-around:
     name: meta.group.look-around.regexplus
-    begin: \(\?(?:=|!|<=|<!)
+    begin: (?x) \(\? <?[=!]
     end: \)|(?=`)
     captures:
       0: { name: punctuation.definition.group.regexp }  # Same as JS/TS

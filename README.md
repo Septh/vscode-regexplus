@@ -38,7 +38,16 @@ Although the full regular expression syntax Regex+ brings is supported, not all 
 For now, the following restrictions apply:
 
 - Only the `regex`, `regex(flags)` and `pattern` tagged templates are supported. The `regex(optionsObject)` variant and the `rewrite` utility are not.
-- Only the main Regex+ package is supported. Support for [the recursion plugin](https://github.com/slevithan/regex-recursion) is not.
+    - To call `regex` with options and still have your expression syntax highlighted, prefix the actual template with `/* regex */` like so:
+
+    ```js
+    const re = regex({
+      flags: 'dgm',
+      subclass: false
+    })/* regex */`...`
+    ```
+
+- Only the main Regex+ package is supported. [The recursion plugin](https://github.com/slevithan/regex-recursion) is not.
 - You cannot rename the imports, they have to be named `regex` and `pattern`.
 
 There is still work in progress and the missing features will be implemented gradually.
@@ -46,6 +55,6 @@ There is still work in progress and the missing features will be implemented gra
 
 ## Release Notes
 
-### 1.0.2
+### 1.1.1
 
 Buf fixes and improvements.
