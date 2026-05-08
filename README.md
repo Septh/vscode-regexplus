@@ -37,18 +37,24 @@ Although the full regular expression syntax Regex+ brings is supported, not all 
 
 For now, the following restrictions apply:
 
-- Only the `regex`, `regex(flags)` and `pattern` tagged templates are supported. The `regex(optionsObject)` variant and the `rewrite` utility are not.
-    - To call `regex` with options and still have your expression syntax highlighted, prefix the actual template with `/* regex */` like so:
+- Only the `regex`, `regex(flags)` and `pattern` tagged templates are highlighted. The `regex(options)` variant and the `rewrite` utility function are not.
+    - To call `regex` with options and still have your regex syntax highlighted, either make it start with `#regex` or prefix the actual template with `/* regex */`:
 
     ```js
-    const re = regex({
-      flags: 'dgm',
-      subclass: false
-    })/* regex */`...`
+    // With embedded start comment:
+    const re = regex(options)`#regex
+    ...
+    `
+
+    // With prefix comment:
+    const re = regex(options)/* regex */`
+    ...
+    `
     ```
 
 - Only the main Regex+ package is supported. [The recursion plugin](https://github.com/slevithan/regex-recursion) is not.
 - You cannot rename the imports, they have to be named `regex` and `pattern`.
+    - If you really want to alias the functions (eg., `import { regex as regexplus } from 'regex'`), you can still use the comment trick described above.
 
 There is still work in progress and the missing features will be implemented gradually.
 
