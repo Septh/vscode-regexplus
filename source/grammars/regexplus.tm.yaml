@@ -125,6 +125,7 @@ repository:
           - include: '#quantifier-min-max-contents'
   quantifier-min-max-contents:
     patterns:
+      - include: '#line-comment'
       - match: \d+
         name: constant.numeric.regexplus
       - match: ','
