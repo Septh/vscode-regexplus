@@ -23,7 +23,6 @@ patterns:
       1: { name: meta.function-call.HOST_LANGUAGE entity.name.function.HOST_LANGUAGE }
       2: { name: meta.brace.round.HOST_LANGUAGE }
       3: { name: string.quoted.single.HOST_LANGUAGE punctuation.definition.string.begin.HOST_LANGUAGE }
-      # 4: { name: string.quoted.single.HOST_LANGUAGE }
       4:
         name: string.quoted.single.HOST_LANGUAGE
         patterns:
@@ -44,12 +43,31 @@ patterns:
       1: { name: meta.function-call.HOST_LANGUAGE entity.name.function.HOST_LANGUAGE }
       2: { name: meta.brace.round.HOST_LANGUAGE }
       3: { name: string.quoted.double.HOST_LANGUAGE punctuation.definition.string.begin.HOST_LANGUAGE }
-      # 4: { name: string.quoted.double.HOST_LANGUAGE }
       4:
         name: string.quoted.double.HOST_LANGUAGE
         patterns:
         - include: '#function-flags'
       5: { name: string.quoted.double.HOST_LANGUAGE punctuation.definition.string.end.HOST_LANGUAGE }
+      6: { name: meta.brace.round.HOST_LANGUAGE }
+      7: { name: string.template.HOST_LANGUAGE punctuation.definition.string.template.begin.HOST_LANGUAGE }
+    endCaptures:
+      1: { name: string.template.HOST_LANGUAGE punctuation.definition.string.template.end.HOST_LANGUAGE }
+    contentName: string.template.HOST_LANGUAGE meta.embedded.HOST_LANGUAGE.regexplus
+    patterns:
+      - include: '#injections'
+
+  # regex(`flags`)`...` (function call, flags backtick quoted)
+  - begin: (?x) \b(regex)\s* (\() (`) ([^"]*) (`) (\)) (`)
+    end: (`)
+    beginCaptures:
+      1: { name: meta.function-call.HOST_LANGUAGE entity.name.function.HOST_LANGUAGE }
+      2: { name: meta.brace.round.HOST_LANGUAGE }
+      3: { name: string.template.HOST_LANGUAGE punctuation.definition.string.template.begin.HOST_LANGUAGE }
+      4:
+        name: string.template.HOST_LANGUAGE
+        patterns:
+        - include: '#function-flags'
+      5: { name: string.template.HOST_LANGUAGE punctuation.definition.string.template.end.HOST_LANGUAGE }
       6: { name: meta.brace.round.HOST_LANGUAGE }
       7: { name: string.template.HOST_LANGUAGE punctuation.definition.string.template.begin.HOST_LANGUAGE }
     endCaptures:
