@@ -195,7 +195,7 @@ repository:
           - include: '#syntax-escape'
           - include: '#character-escape'
           - include: '#disjunction'
-      - match: --|&&
+      - match: "(?x) --? | && | !! | \\#\\# | \\$\\$ | %% | \\*\\* | \\+\\+ | ,, | \\.\\. | :: | ;; | << | == | >> | \\?\\? | @@ | \\^\\^ | `` | ~~"
         name: keyword.operator.or.regexp    # Same as TS/JS's |
       - include: '#quantifier-short'
       - include: '#quantifier-min-max'
