@@ -39,12 +39,12 @@ repository:
   # https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Regular_expressions/Character_escape
   # With '#' added
   syntax-escape:
-    match: '(?x)\\ [ \^ \$ \\ \. \* \+ \? \( \) \[ \] \{ \} \| \/ \# ]'
+    match: '(?x) \\ [ \^ \$ \\ \. \* \+ \? \( \) \[ \] \{ \} \| \/ \# ]'
     name: constant.character.escape.regexplus
 
   character-escape:
     patterns:
-      - match: \\[fnrtv0]   # cSpell:disable-line
+      - match: \\[fnrtv0]
         name: constant.character.escape.regexplus
       - match: \[\\b\]
         name: constant.character.escape.regexplus
@@ -54,7 +54,7 @@ repository:
         captures:
           1: { name: constant.character.escape.regexplus }
           2: { name: constant.numeric.regexplus }
-      - match: (\\u\{)([a-fA-F0-9]{1,6})(\})
+      - match: (\\u\{)([^}]*)(\})
         captures:
           1: { name: constant.character.escape.regexplus }
           2: { name: constant.numeric.regexplus }
@@ -94,12 +94,12 @@ repository:
     patterns:
       - match: \\[1-9]
         name: variable.other.regexplus
-      - match: (\\k<)([$_\p{ID_Start}][$\u200C\u200D\p{ID_Continue}]*)?(>)
+      - match: (\\k<)([^>]*)(>)
         captures:
           1: { name: keyword.other.regexplus }
-          2: { name: variable.other.constant.regexplus }
+          2: { name: variable.other.regexplus }
           3: { name: keyword.other.regexplus }
-      - match: (\\g<)([$_\p{ID_Start}][$\u200C\u200D\p{ID_Continue}]*)?(>)
+      - match: (\\g<)([^>]*)(>)
         captures:
           1: { name: keyword.other.regexplus }
           2: { name: entity.name.function.regexplus }
@@ -120,7 +120,7 @@ repository:
         end: \}[?+]?
         name: meta.quantifier.regexplus
         captures:
-          0: { name: keyword.operator.quantifier.regexp }   # Unfortunate, but same as TS/JS
+          0: { name: keyword.operator.quantifier.regexp }   # Same as TS/JS
         patterns:
           - include: '#quantifier-min-max-contents'
   quantifier-min-max-contents:
@@ -131,7 +131,7 @@ repository:
       - match: ','
         name: keyword.operator.separator.regexplus
       - match: \S
-        name: invalid.illegal.regexplus
+        name: string.regexp
 
   # https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Regular_expressions/Modifier
   modifiers:
@@ -145,7 +145,7 @@ repository:
   modifiers-contents:
     patterns:
       - match: '[-ims]+'
-        name: constant.language.regexplus
+        name: storage.modifier.regexplus
       - begin: ':'
         end: (?=\))
         beginCaptures:
@@ -153,7 +153,7 @@ repository:
         patterns:
           - include: '#all-rules'
       - match: \S
-        name: invalid.illegal.regexplus
+        name: string.regexp
 
   # https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Regular_expressions/Unicode_character_class_escape
   unicode-character-class-escape:
@@ -165,12 +165,12 @@ repository:
       - include: '#unicode-character-class-escape-contents'
   unicode-character-class-escape-contents:
     patterns:
-      - match: \w+
+      - match: '[^=}]+'
         name: support.constant.regexplus
       - match: =
         name: keyword.operator.assignment.regexplus
       - match: \S
-        name: invalid.illegal.regexplus
+        name: string.regexp
 
   # https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Regular_expressions/Character_class
   character-class:
@@ -213,7 +213,7 @@ repository:
       - include: '#simple-capturing-group'
       - begin: \(\?
         end: \)
-        name: invalid.illegal.regexplus
+        name: string.regexp
 
   # https://github.com/slevithan/regex/tree/main#atomic-groups
   atomic-group:
@@ -245,10 +245,10 @@ repository:
 
   named-capturing-group:
     name: meta.group.named-capture.regexplus
-    begin: (\(\?<)([$_\p{ID_Start}][$\u200C\u200D\p{ID_Continue}]*)?(>)
+    begin: (\(\?<)([^>)]*)(>)?
     beginCaptures:
       1: { name: punctuation.definition.group.regexp }  # Same as JS/TS
-      2: { name: variable.other.constant.regexplus }
+      2: { name: variable.other.regexplus }
       3: { name: punctuation.definition.group.regexp }  # Same as JS/TS
     end: \)
     endCaptures:

@@ -104,7 +104,7 @@ patterns:
 repository:
   function-flags:
     patterns:
-    - match: ([dgmsy]+)
+    - match: ([dgimsuvy]+)
       name: constant.language.regexplus
     - match: \S
       name: invalid.illegal.regexplus
@@ -112,15 +112,19 @@ repository:
   injections:
     patterns:
       - include: '#host-language-stuff'
+
+      # Include the language main rules...
       - include: text.regexplus#shared-rules
-      # When injecting Regex+, we use a few local, custom rules
-      # rather than those defined in the main language file.
+
+      # ... and redefine a few others.
       - include: '#injected-line-comment'
       - include: '#injected-modifiers'
       - include: '#injected-quantifier-min-max'
       - include: '#injected-unicode-character-class-escape'
       - include: '#injected-character-class'
       - include: '#injected-group'
+
+      # Catch-all fallback.
       - match: \S
         name: string.regexp
 
@@ -139,7 +143,7 @@ repository:
     beginCaptures:
       0: { name: punctuation.definition.comment.regexplus }
     patterns:
-      # Catch escaped backticks
+      # Catch escaped backticks in comments
       - match: \\`
 
   injected-modifiers:
@@ -192,7 +196,7 @@ repository:
       - include: '#injected-simple-capturing-group'
       - begin: \(\s*\?
         end: \)|(?=`)
-        name: invalid.illegal.regexplus
+        name: string.regexp
 
   injected-atomic-group:
     name: meta.group.atomic.regexplus
@@ -223,10 +227,10 @@ repository:
 
   injected-named-capturing-group:
     name: meta.group.capturing.regexplus
-    begin: (\(\?<)([$_\p{ID_Start}][$\u200C\u200D\p{ID_Continue}]*)?(>)
+    begin: (\(\?<)([^>)]*)(>)?
     beginCaptures:
       1: { name: punctuation.definition.group.regexp }  # Same as JS/TS
-      2: { name: variable.other.constant.regexplus }
+      2: { name: variable.other.regexplus }
       3: { name: punctuation.definition.group.regexp }  # Same as JS/TS
     end: \)|(?=`)
     endCaptures:
