@@ -12,7 +12,6 @@ repository:
     patterns:
       - include: '#syntax-escape'
       - include: '#character-escape'
-      - include: '#line-comment'
       - include: '#boundary-assertion'
       - include: '#disjunction'
       - include: '#wildcard'
@@ -23,6 +22,7 @@ repository:
   # These are not: injections need to redefine them.
   local-rules:
     patterns:
+      - include: '#line-comment'
       - include: '#quantifier-min-max'
       - include: '#modifiers'
       - include: '#unicode-character-class-escape'

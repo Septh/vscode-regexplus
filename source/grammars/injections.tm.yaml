@@ -115,6 +115,7 @@ repository:
       - include: text.regexplus#shared-rules
       # When injecting Regex+, we use a few local, custom rules
       # rather than those defined in the main language file.
+      - include: '#injected-line-comment'
       - include: '#injected-modifiers'
       - include: '#injected-quantifier-min-max'
       - include: '#injected-unicode-character-class-escape'
@@ -130,6 +131,16 @@ repository:
       # Catch escaped backticks
       - match: \\`
         name: constant.character.escape.regexplus
+
+  injected-line-comment:
+    begin: '#'
+    end: $|(?=(?:\$\{)|`)
+    name: comment.line.number-sign.regexplus
+    beginCaptures:
+      0: { name: punctuation.definition.comment.regexplus }
+    patterns:
+      # Catch escaped backticks
+      - match: \\`
 
   injected-modifiers:
     begin: \(\?(?=[-a-z])
