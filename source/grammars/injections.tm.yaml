@@ -1,78 +1,43 @@
 $schema: https://raw.githubusercontent.com/RedCMD/TmLanguage-Syntax-Highlighter/main/vscode.tmLanguage.schema.json
 scopeName: text.embedded.HOST_LANGUAGE.regexplus
-injectionSelector: L:source.HOST_LANGUAGE -comment -string.quoted
+injectionSelector: L:source.HOST_LANGUAGE -comment -(string -quoted -meta.embedded)
 
 patterns:
 
-  # regex`...`, pattern`...` (regular tagged template)
-  - begin: \b(regex|pattern)\s*(`)
+  # regex`...` or pattern`...` (regular tagged template)
+  - begin: (?x) \b ((?:\w+\s*\.\s*)*) (regex)\s* (`)
     end: (`)
     beginCaptures:
-      1: { name: entity.name.function.tagged-template.HOST_LANGUAGE }
-      2: { name: string.template.HOST_LANGUAGE punctuation.definition.string.template.begin.HOST_LANGUAGE }
+      1: { name: variable.other.object.HOST_LANGUAGE }
+      2: { name: entity.name.function.tagged-template.HOST_LANGUAGE }
+      3: { name: string.template.HOST_LANGUAGE punctuation.definition.string.template.begin.HOST_LANGUAGE }
     endCaptures:
       1: { name: string.template.HOST_LANGUAGE punctuation.definition.string.template.end.HOST_LANGUAGE }
-    contentName: string.template.HOST_LANGUAGE meta.embedded.HOST_LANGUAGE.regexplus
+    contentName: text.regexplus
     patterns:
       - include: '#injections'
 
-  # regex('flags')`...` (function call, flags single quoted)
-  - begin: (?x) \b(regex)\s* (\() (?:(') ([^']*) ('))? (\)) (`)
+  # regex('flags')`...` (function call with (single|double|backtick)-quoted flags)
+  - begin: (?x) \b ((?:\w+\s*\.\s*)*) (regex) \s*(\()\s* (?:(["'\`]) (.*?) (\4))? \s*(\))\s* (`)
     end: (`)
     beginCaptures:
-      1: { name: meta.function-call.HOST_LANGUAGE entity.name.function.HOST_LANGUAGE }
-      2: { name: meta.brace.round.HOST_LANGUAGE }
-      3: { name: string.quoted.single.HOST_LANGUAGE punctuation.definition.string.begin.HOST_LANGUAGE }
-      4:
+      1: { name: variable.other.object.HOST_LANGUAGE }
+      2: { name: meta.function-call.HOST_LANGUAGE entity.name.function.HOST_LANGUAGE }
+      3: { name: meta.brace.round.HOST_LANGUAGE }
+      4: { name: string.quoted.single.HOST_LANGUAGE punctuation.definition.string.begin.HOST_LANGUAGE }
+      5:
         name: string.quoted.single.HOST_LANGUAGE
         patterns:
-        - include: '#function-flags'
-      5: { name: string.quoted.single.HOST_LANGUAGE punctuation.definition.string.end.HOST_LANGUAGE }
-      6: { name: meta.brace.round.HOST_LANGUAGE }
-      7: { name: string.template.HOST_LANGUAGE punctuation.definition.string.template.begin.HOST_LANGUAGE }
+        - match: ([dgimsuvy]+)  # cSpell:disable-line
+          name: constant.language.regexplus
+        - match: \S
+          name: invalid.illegal.regexplus
+      6: { name: string.quoted.single.HOST_LANGUAGE punctuation.definition.string.end.HOST_LANGUAGE }
+      7: { name: meta.brace.round.HOST_LANGUAGE }
+      8: { name: string.template.HOST_LANGUAGE punctuation.definition.string.template.begin.HOST_LANGUAGE }
     endCaptures:
       1: { name: string.template.HOST_LANGUAGE punctuation.definition.string.template.end.HOST_LANGUAGE }
-    contentName: string.template.HOST_LANGUAGE meta.embedded.HOST_LANGUAGE.regexplus
-    patterns:
-      - include: '#injections'
-
-  # regex("flags")`...` (function call, flags double quoted)
-  - begin: (?x) \b(regex)\s* (\() (") ([^"]*) (") (\)) (`)
-    end: (`)
-    beginCaptures:
-      1: { name: meta.function-call.HOST_LANGUAGE entity.name.function.HOST_LANGUAGE }
-      2: { name: meta.brace.round.HOST_LANGUAGE }
-      3: { name: string.quoted.double.HOST_LANGUAGE punctuation.definition.string.begin.HOST_LANGUAGE }
-      4:
-        name: string.quoted.double.HOST_LANGUAGE
-        patterns:
-        - include: '#function-flags'
-      5: { name: string.quoted.double.HOST_LANGUAGE punctuation.definition.string.end.HOST_LANGUAGE }
-      6: { name: meta.brace.round.HOST_LANGUAGE }
-      7: { name: string.template.HOST_LANGUAGE punctuation.definition.string.template.begin.HOST_LANGUAGE }
-    endCaptures:
-      1: { name: string.template.HOST_LANGUAGE punctuation.definition.string.template.end.HOST_LANGUAGE }
-    contentName: string.template.HOST_LANGUAGE meta.embedded.HOST_LANGUAGE.regexplus
-    patterns:
-      - include: '#injections'
-
-  # regex(`flags`)`...` (function call, flags backtick quoted)
-  - begin: (?x) \b(regex)\s* (\() (`) ([^"]*) (`) (\)) (`)
-    end: (`)
-    beginCaptures:
-      1: { name: meta.function-call.HOST_LANGUAGE entity.name.function.HOST_LANGUAGE }
-      2: { name: meta.brace.round.HOST_LANGUAGE }
-      3: { name: string.template.HOST_LANGUAGE punctuation.definition.string.template.begin.HOST_LANGUAGE }
-      4:
-        name: string.template.HOST_LANGUAGE
-        patterns:
-        - include: '#function-flags'
-      5: { name: string.template.HOST_LANGUAGE punctuation.definition.string.template.end.HOST_LANGUAGE }
-      6: { name: meta.brace.round.HOST_LANGUAGE }
-      7: { name: string.template.HOST_LANGUAGE punctuation.definition.string.template.begin.HOST_LANGUAGE }
-    endCaptures:
-      1: { name: string.template.HOST_LANGUAGE punctuation.definition.string.template.end.HOST_LANGUAGE }
-    contentName: string.template.HOST_LANGUAGE meta.embedded.HOST_LANGUAGE.regexplus
+    contentName: text.regexplus
     patterns:
       - include: '#injections'
 
@@ -86,7 +51,7 @@ patterns:
       4: { name: string.template.HOST_LANGUAGE punctuation.definition.string.template.begin.HOST_LANGUAGE }
     endCaptures:
       1: { name: string.template.HOST_LANGUAGE punctuation.definition.string.template.end.HOST_LANGUAGE }
-    contentName: string.template.HOST_LANGUAGE meta.embedded.HOST_LANGUAGE.regexplus
+    contentName: text.regexplus
     patterns:
       - include: '#injections'
 
@@ -97,48 +62,43 @@ patterns:
       1: { name: string.template.HOST_LANGUAGE punctuation.definition.string.template.begin.HOST_LANGUAGE }
     endCaptures:
       1: { name: string.template.HOST_LANGUAGE punctuation.definition.string.template.end.HOST_LANGUAGE }
-    contentName: string.template.HOST_LANGUAGE meta.embedded.HOST_LANGUAGE.regexplus
+    contentName: text.regexplus
     patterns:
       - include: '#injections'
 
 repository:
-  function-flags:
-    patterns:
-    - match: ([dgimsuvy]+)
-      name: constant.language.regexplus
-    - match: \S
-      name: invalid.illegal.regexplus
 
   injections:
     patterns:
+      - include: '#line-comment'
       - include: '#host-language-stuff'
+      - include: 'text.regexplus#shared-rules'
+      - include: '#local-rules'
+      - include: 'text.regexplus#literal'
 
-      # Include the language main rules...
-      - include: text.regexplus#shared-rules
+  local-rules:
+    patterns:
+      - include: '#back-reference-name'
+      - include: '#quantifier-range'
+      - include: '#local-escapes'
+      - include: '#character-class'
+      - include: '#group-like'
+  local-escapes:
+    patterns:
+      - include: '#hex-6-escape'
+      - include: '#unicode-escape'
+      - include: '#substring-escape'
 
-      # ... and redefine a few others.
-      - include: '#injected-line-comment'
-      - include: '#injected-modifiers'
-      - include: '#injected-quantifier-min-max'
-      - include: '#injected-unicode-character-class-escape'
-      - include: '#injected-character-class'
-      - include: '#injected-group'
-
-      # Catch-all fallback.
-      - match: \S
-        name: string.regexp
-
+  # ${...} substitutions and escaped backticks
   host-language-stuff:
     patterns:
-      # Allow ${...} substitution in template string
       - include: source.HOST_LANGUAGE#template-substitution-element
-      # Catch escaped backticks
       - match: \\`
         name: constant.character.escape.regexplus
 
-  injected-line-comment:
-    begin: '#'
-    end: $|(?=(?:\$\{)|`)
+  line-comment:
+    begin: (?<!\\)#
+    end: $|(?=(?<!\\)(?:\$\{|`))
     name: comment.line.number-sign.regexplus
     beginCaptures:
       0: { name: punctuation.definition.comment.regexplus }
@@ -146,114 +106,179 @@ repository:
       # Catch escaped backticks in comments
       - match: \\`
 
-  injected-modifiers:
-    begin: \(\?(?=[-a-z])
-    end: \)|(?=`)
-    name: meta.group.modifiers.regexplus
+  hex-6-escape:
+    begin: (?<!\\)(\\u\{)
+    end: (?<!\\)(\})|(?=(?<!\\)`)|$
+    captures:
+      1: { name: constant.character.escape.hex6.regexplus }
+    patterns:
+      - include: '#host-language-stuff'
+      - include: 'text.regexplus#hex-6-escape-contents'
+
+  unicode-escape:
+    begin: (?<!\\)(\\[pP]\{)
+    end: (?<!\\)(\})|(?=(?<!\\)`)|$
+    captures:
+      1: { name: support.class.regexplus }
+    contentName: string.regexp
+    patterns:
+      - include: '#host-language-stuff'
+      - include: 'text.regexplus#unicode-escape-contents'
+
+  substring-escape:
+    begin: (?<!\\)(\\q\{)
+    end: (?<!\\)(\})|(?=(?<!\\)`)|$
+    name: string.character-class.substring.regexplus
+    beginCaptures:
+      1: { name: string.character-class.substring.begin.regexplus }
+    endCaptures:
+      1: { name: string.character-class.substring.end.regexplus }
+    patterns:
+      - include: '#host-language-stuff'
+      - include: 'text.regexplus#substring-escape-contents'
+      - include: '#local-escapes'
+  in-class-substring-escape:
+    begin: (?<!\\)(\\q\{)
+    end: (?<!\\)(\})|(?=(?<!\\)[\]`])|$
+    name: string.character-class.substring.regexplus
+    beginCaptures:
+      1: { name: string.character-class.substring.begin.regexplus }
+    endCaptures:
+      1: { name: string.character-class.substring.end.regexplus }
+    patterns:
+      - include: '#host-language-stuff'
+      - include: 'text.regexplus#substring-escape-contents'
+      - include: '#local-escapes'
+
+  back-reference-name:
+    patterns:
+      - begin: (?<!\\)(\\g<)
+        end: (?<!\\)(>)|(?=(?<!\\)`)|$
+        captures:
+          1: { name: keyword.other.regexplus }
+        patterns:
+          - include: '#host-language-stuff'
+          - include: 'text.regexplus#back-reference-subroutine-contents'
+      - begin: (?<!\\)(\\k<)
+        end: (?<!\\)(>)|(?=(?<!\\)`)|$
+        captures:
+          1: { name: keyword.other.regexplus }
+        patterns:
+          - include: '#host-language-stuff'
+          - include: 'text.regexplus#back-reference-name-contents'
+
+  quantifier-range:
+    patterns:
+      - begin: (?<!\\[pPqu])(\{)
+        end: (?<!\\)(}[?+]?)|(?=(?<!\\)`)|$
+        name: meta.quantifier.regexplus
+        captures:
+          1: { name: keyword.operator.quantifier.regexp }   # Same as TS/JS
+        patterns:
+          - include: '#host-language-stuff'
+          - include: 'text.regexplus#quantifier-range-contents'
+
+  character-class:
+    begin: (?<!\\)(\[)(\^?)
+    end: (?<!\\)(\])|(?=(?<!\\)`)
+    name: meta.character-class.regexplus
+    captures:
+      1: { name: punctuation.definition.character-class.regexp }    # Same as TS/JS
+      2: { name: keyword.operator.negation.regexp }                 # Same as TS/JS
+    patterns:
+      - include: '#host-language-stuff'
+      - include: '#character-class'
+      - include: '#in-class-substring-escape'
+      - include: '#local-escapes'
+      - include: 'text.regexplus#character-class-contents'
+
+  group-like:
+    patterns:
+      - include: '#inline-flags-modifiers'
+      - include: '#look-around'
+      - include: '#atomic-group'
+      - include: '#non-capturing-group'
+      - include: '#named-capturing-group'
+      - include: '#subroutine-definition-group'
+      - include: '#simple-capturing-group'
+      - include: 'text.regexplus#group-literal'
+
+  inline-flags-modifiers:
+    begin: (?<!\\)(\(\?)(?=[ims-])
+    end: (?<!\\)(\))|(?=(?<!\\)`)
+    name: meta.group.inline-flags.regexplus
     captures:
       0: { name: punctuation.definition.group.regexp }
     patterns:
       - include: '#host-language-stuff'
-      - include: 'text.regexplus#modifiers-contents'
-
-  injected-quantifier-min-max:
-    patterns:
-      - begin: \{
-        end: (\}[?+]?)|(?=`)
-        name: meta.quantifier.regexplus
-        captures:
-          0: { name: keyword.operator.quantifier.regexp }   # Same as TS/JS
+      - include: 'text.regexplus#inline-flags-modifiers-contents'
+      - begin: (?<!\\)(:)
+        end: (?=(?<!\\)[)`])
+        beginCaptures:
+          1: { name: keyword.operator.separator.regexplus }
         patterns:
-          - include: '#host-language-stuff'
-          - include: text.regexplus#quantifier-min-max-contents
+          - include: '#injections'
 
-  injected-unicode-character-class-escape:
-    begin: \\[pP]\{
-    end: \}|(?=`)
-    name: support.class.regexplus
-    contentName: string.regexp   # For themes that don't have support.constant
-    patterns:
-      - include: '#host-language-stuff'
-      - include: text.regexplus#unicode-character-class-escape-contents
-
-  injected-character-class:
-    begin: \[\^?
-    end: \]|(?=`)
-    name: meta.character-class.regexplus
-    captures:
-      0: { name: punctuation.definition.character-class.regexp }  # Same as TS/JS
-    patterns:
-      - include: '#host-language-stuff'
-      - include: text.regexplus#character-class-contents
-
-  injected-group:
-    patterns:
-      - include: '#injected-atomic-group'
-      - include: '#injected-look-around'
-      - include: '#injected-non-capturing-group'
-      - include: '#injected-named-capturing-group'
-      - include: '#injected-subroutine-definition-group'
-      - include: '#injected-simple-capturing-group'
-      - begin: \(\s*\?
-        end: \)|(?=`)
-        name: string.regexp
-
-  injected-atomic-group:
-    name: meta.group.atomic.regexplus
-    begin: \(\?>
-    end: \)|(?=`)
-    captures:
-      0: { name: punctuation.definition.group.regexp }  # Same as JS/TS
-    patterns:
-      - include: '#injections'
-
-  injected-look-around:
+  look-around:
+    begin: (?<!\\)(\(\?<?[=!])
+    end: (?<!\\)(\))|(?=(?<!\\)`)
     name: meta.group.look-around.regexplus
-    begin: (?x) \(\? <?[=!]
-    end: \)|(?=`)
     captures:
-      0: { name: punctuation.definition.group.regexp }  # Same as JS/TS
-    patterns:
-      - include: '#injections'
-
-  injected-non-capturing-group:
-    name: meta.group.non-capturing.regexplus
-    begin: '\(\?:'
-    end: \)|(?=`)
-    captures:
-      0: { name: punctuation.definition.group.regexp }  # Same as JS/TS
-    patterns:
-      - include: '#injections'
-
-  injected-named-capturing-group:
-    name: meta.group.capturing.regexplus
-    begin: (\(\?<)([^>)]*)(>)?
-    beginCaptures:
       1: { name: punctuation.definition.group.regexp }  # Same as JS/TS
-      2: { name: variable.other.regexplus }
-      3: { name: punctuation.definition.group.regexp }  # Same as JS/TS
-    end: \)|(?=`)
-    endCaptures:
-      0: { name: punctuation.definition.group.regexp }  # Same as JS/TS
     patterns:
       - include: '#injections'
 
-  injected-subroutine-definition-group:
-    name: meta.group.regexplus
-    begin: \(\?\((DEFINE)\)
-    end: \)|(?=`)
+  atomic-group:
+    begin: (?<!\\)(\(\?>)
+    end: (?<!\\)(\))|(?=(?<!\\)`)
+    name: meta.group.atomic.regexplus
     captures:
-      0: { name: punctuation.definition.group.regexp }  # Same as JS/TS
-      1: { name: support.function.regexp }
+      1: { name: punctuation.definition.group.regexp }  # Same as JS/TS
     patterns:
       - include: '#injections'
 
-  injected-simple-capturing-group:
-    name: meta.group.regexplus
-    begin: \((?!\?)
-    end: \)|(?=`)
+  non-capturing-group:
+    begin: (?<!\\)(\(\?:)
+    end: (?<!\\)(\))|(?=(?<!\\)`)
+    name: meta.group.no-capture.regexplus
     captures:
-      0: { name: punctuation.definition.group.regexp }  # Same as JS/TS
+      1: { name: punctuation.definition.group.regexp }  # Same as JS/TS
+    patterns:
+      - include: '#injections'
+
+  named-capturing-group:
+    begin: (?<!\\)(\(\?<)(?![=!])
+    end: (?<!\\)(\))|(?=(?<!\\)`)
+    name: meta.group.named-capture.regexplus
+    captures:
+      1: { name: punctuation.definition.group.regexp }  # Same as JS/TS
+    patterns:
+      - include: '#host-language-stuff'
+      - include: 'text.regexplus#named-capturing-group-contents'
+      - begin: (?<!\\)(>)
+        end: (?=(?<!\\)[)`])
+        beginCaptures:
+          1: { name: punctuation.definition.group.regexp }
+        patterns:
+          - include: '#injections'
+
+  subroutine-definition-group:
+    begin: (?<!\\)(\(\?\((DEFINE)\))
+    end: (?<!\\)(\))|(?=(?<!\\)`)
+    name: meta.group.subroutine-definition.regexplus
+    captures:
+      1: { name: punctuation.definition.group.regexp }  # Same as JS/TS
+      2: { name: support.function.regexp }
+    patterns:
+      - include: '#injections'
+
+  simple-capturing-group:
+    begin: (?<!\\)(\()(?:(\?(?![=!<>:ims-]))?)
+    end: (?<!\\)(\))|(?=(?<!\\)`)
+    name: meta.group.regexplus
+    captures:
+      1: { name: punctuation.definition.group.regexp }  # Same as JS/TS
+      2: { name: keyword.operator.quantifier.regexp }  # Same as JS/TS
     patterns:
       - include: '#injections'
 

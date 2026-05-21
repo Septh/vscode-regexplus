@@ -3,276 +3,374 @@ name: Regexp+
 scopeName: text.regexplus
 
 patterns:
-  - include: '#all-rules'
+  - include: '#pattern'
 
 repository:
+
+  pattern:
+    patterns:
+      - include: '#line-comment'
+      - include: '#shared-rules'
+      - include: '#local-rules'
+      - include: '#literal'
 
   # These rules are common to .regex+ files and injections.
   shared-rules:
     patterns:
-      - include: '#syntax-escape'
-      - include: '#character-escape'
-      - include: '#boundary-assertion'
       - include: '#disjunction'
       - include: '#wildcard'
+      - include: '#boundary-assertion'
+      - include: '#quantifier-char'
+      - include: '#back-reference-number'
+      - include: '#shared-escapes'
+  shared-escapes:
+    patterns:
+      - include: '#syntax-escape'
+      - include: '#control-escape'
       - include: '#character-class-escape'
-      - include: '#backreference'
-      - include: '#quantifier-short'
+      - include: '#hex-2-escape'
+      - include: '#hex-4-escape'
+      - include: '#identity-escape'
 
-  # These are not: injections need to redefine them.
+  # These are not: injections need to redefine them
   local-rules:
     patterns:
-      - include: '#line-comment'
-      - include: '#quantifier-min-max'
-      - include: '#modifiers'
-      - include: '#unicode-character-class-escape'
+      - include: '#back-reference-name'
+      - include: '#quantifier-range'
+      - include: '#local-escapes'
       - include: '#character-class'
-      - include: '#group'
-
-  all-rules:
+      - include: '#group-like'
+  local-escapes:
     patterns:
-      - include: '#shared-rules'
-      - include: '#local-rules'
-      - match: \S
-        name: string.regexp
-
-  # https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Regular_expressions/Character_escape
-  # With '#' added
-  syntax-escape:
-    match: '(?x) \\ [ \^ \$ \\ \. \* \+ \? \( \) \[ \] \{ \} \| \/ \# ]'
-    name: constant.character.escape.regexplus
-
-  character-escape:
-    patterns:
-      - match: \\[fnrtv0]
-        name: constant.character.escape.regexplus
-      - match: \[\\b\]
-        name: constant.character.escape.regexplus
-      - match: \\c[a-zA-Z]
-        name: constant.character.escape.regexplus
-      - match: (\\x)([a-fA-F0-9]{2})
-        captures:
-          1: { name: constant.character.escape.regexplus }
-          2: { name: constant.numeric.regexplus }
-      - match: (\\u\{)([^}]*)(\})
-        captures:
-          1: { name: constant.character.escape.regexplus }
-          2: { name: constant.numeric.regexplus }
-          3: { name: constant.character.escape.regexplus }
-      - match: (\\u)([a-fA-F0-9]{4})
-        captures:
-          1: { name: constant.character.escape.regexplus }
-          2: { name: constant.numeric.regexplus }
+      - include: '#hex-6-escape'
+      - include: '#unicode-escape'
+      - include: '#substring-escape'
 
   # https://github.com/slevithan/regex/tree/main#flag-x
   line-comment:
-    begin: '#'
+    begin: (?<!\\)#
     end: $
     name: comment.line.number-sign.regexplus
     beginCaptures:
       0: { name: punctuation.definition.comment.regexplus }
 
+  # Anything that is not (the start of) a syntax token
+  literal:
+    match: '(?x) [^ \\ ^$|.*+? (\[{ # ]+'
+    name: string.regexp
+
+  group-literal:
+    match: '(?x) [^ \\ ^$|.*+? () \[{ # ]+'
+    name: string.regexp
+
+  disjunction:
+    match: \|
+    name: keyword.operator.disjunction.regexplus
+
+  wildcard:
+    match: \.
+    name: keyword.operator.wildcard.regexplus
+
   boundary-assertion:
     match: \^|\$|\\[bB]
     name: constant.language.regexplus
 
-  disjunction:
-    match: \|
-    name: keyword.operator.or.regexp    # Same as TS/JS
+  # https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Regular_expressions/Character_escape
+  syntax-escape:
+    match: '(?x) \\ [ \\ ^$|.*+? () \[\] {} # ]'  # with # added
+    name: constant.character.escape.syntax.regexplus
 
-  wildcard:
-    match: \.
-    name: keyword.operator.or.regexp    # Same as TS/JS's |
+  control-escape:
+    patterns:
+      - match: \\[fnrtv0]
+        name: constant.character.escape.control.regexplus
+      - match: \[\\b\]
+        name: constant.character.escape.control.regexplus
+      - match: \\c[[:alpha:]]
+        name: constant.character.escape.control.regexplus
 
-  # https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Regular_expressions/Character_class_escape
   character-class-escape:
     match: \\[sSdDwW]
     name: support.class.regexplus
 
-  # https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Regular_expressions/Backreference
-  backreference:
-    patterns:
-      - match: \\[1-9]
-        name: variable.other.regexplus
-      - match: (\\k<)([^>]*)(>)
-        captures:
-          1: { name: keyword.other.regexplus }
-          2: { name: variable.other.regexplus }
-          3: { name: keyword.other.regexplus }
-      - match: (\\g<)([^>]*)(>)
-        captures:
-          1: { name: keyword.other.regexplus }
-          2: { name: entity.name.function.regexplus }
-          3: { name: keyword.other.regexplus }
-
-  # https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Regular_expressions/Quantifier
-  # https://github.com/slevithan/regex/tree/main#possessive-quantifiers
-  quantifier-short:
-    patterns:
-      - match: '[*?+][?+]?'
-        name: meta.quantifier.regexplus
-        captures:
-          0: { name: keyword.operator.quantifier.regexp }   # Same as TS/JS
-
-  quantifier-min-max:
-    patterns:
-      - begin: \{
-        end: \}[?+]?
-        name: meta.quantifier.regexplus
-        captures:
-          0: { name: keyword.operator.quantifier.regexp }   # Same as TS/JS
-        patterns:
-          - include: '#quantifier-min-max-contents'
-  quantifier-min-max-contents:
-    patterns:
-      - include: '#line-comment'
-      - match: \d+
-        name: constant.numeric.regexplus
-      - match: ','
-        name: keyword.operator.separator.regexplus
-      - match: \S
-        name: string.regexp
-
-  # https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Regular_expressions/Modifier
-  modifiers:
-    begin: \(\?(?=[-a-z])
-    end: \)
-    name: meta.group.modifiers.regexplus
+  hex-2-escape:
+    match: (\\x)([[:xdigit:]]{1,2})
     captures:
-      0: { name: punctuation.definition.group.regexp }
+      1: { name: constant.character.escape.hex2.regexplus }
+      2: { name: constant.numeric.regexplus }
+
+  hex-4-escape:
+    match: (\\u)([[:xdigit:]]{1,4})
+    captures:
+      1: { name: constant.character.escape.hex4.regexplus }
+      2: { name: constant.numeric.regexplus }
+
+  hex-6-escape:
+    begin: (?<!\\)(\\u\{)
+    end: (?<!\\)(\})|$
+    captures:
+      1: { name: constant.character.escape.hex6.regexplus }
     patterns:
-      - include: '#modifiers-contents'
-  modifiers-contents:
+      - include: '#hex-6-escape-contents'
+  hex-6-escape-contents:
     patterns:
-      - match: '[-ims]+'
-        name: storage.modifier.regexplus
-      - begin: ':'
-        end: (?=\))
-        beginCaptures:
-          0: { name: keyword.operator.or.regexp }
-        patterns:
-          - include: '#all-rules'
+      - match: ([[:xdigit:]]+)
+        name: constant.numeric.regexplus
       - match: \S
         name: string.regexp
 
   # https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Regular_expressions/Unicode_character_class_escape
-  unicode-character-class-escape:
-    begin: \\[pP]\{
-    end: \}
-    name: support.class.regexplus
-    contentName: string.regexp   # For themes that don't have support.constant
+  unicode-escape:
+    begin: (?<!\\)(\\[pP]\{)
+    end: (?<!\\)(\})|$
+    captures:
+      1: { name: support.class.regexplus }
+    contentName: string.regexp   # for themes that don't have support.constant
     patterns:
-      - include: '#unicode-character-class-escape-contents'
-  unicode-character-class-escape-contents:
+      - include: '#unicode-escape-contents'
+  unicode-escape-contents:
     patterns:
-      - match: '[^=}]+'
+      - match: \w+
         name: support.constant.regexplus
       - match: =
         name: keyword.operator.assignment.regexplus
       - match: \S
         name: string.regexp
 
-  # https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Regular_expressions/Character_class
-  character-class:
-    begin: \[\^?
-    end: \]
-    name: meta.character-class.regexplus
-    captures:
-      0: { name: punctuation.definition.character-class.regexp }  # Same as TS/JS
+  # https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Regular_expressions/Character_class#v-mode_character_class
+  # Altough \q is only valid in character classes, we wan't to match it anywhere
+  # and leave it to the linter to tell the user they made a mistake.
+  substring-escape:
+    begin: (?<!\\)(\\q\{)
+    end: (?<!\\)(\})|$
+    name: string.character-class.substring.regexplus
+    beginCaptures:
+      1: { name: string.character-class.substring.begin.regexplus }
+    endCaptures:
+      1: { name: string.character-class.substring.end.regexplus }
     patterns:
-      - include: '#character-class-contents'
-  character-class-contents:
+      - include: '#substring-escape-contents'
+      - include: '#local-escapes'
+  # The in-class version needs to account for the closing ]
+  in-class-substring-escape:
+    begin: (?<!\\)(\\q\{)
+    end: (?<!\\)(\})|(?=(?<!\\)\])|$
+    name: string.character-class.substring.regexplus
+    beginCaptures:
+      1: { name: string.character-class.substring.begin.regexplus }
+    endCaptures:
+      1: { name: string.character-class.substring.end.regexplus }
     patterns:
-      - include: '#syntax-escape'
-      - include: '#character-escape'
-      - include: '#character-class-escape'
-      - include: '#unicode-character-class-escape'
-      - begin: \\q\{
-        end: \}
-        name: punctuation.definition.character-class.regexp
-        contentName: string.regexp
+      - include: '#substring-escape-contents'
+      - include: '#local-escapes'
+  substring-escape-contents:
+    patterns:
+      - include: '#disjunction'
+      # \b in substrings is backspace escape, not boundary assertion.
+      - match: \\b
+        name: constant.character.escape.control.regexplus
+      - include: '#shared-escapes'
+
+  # Any \character pair that is not an escape
+  identity-escape:
+    patterns:
+      - match: \\[^\\\sbBcdDfgknpPqrsStuvwWx0-9]
+        name: constant.character.escape.identity.regexplus
+      - match: \\c(?![{:alpha}])
+        name: constant.character.escape.identity.regexplus
+      - match: \\[gk](?!<)
+        name: constant.character.escape.identity.regexplus
+      - match: \\[pPq](?!\{)
+        name: constant.character.escape.identity.regexplus
+      - match: \\u(?![[:xdigit:]{])
+        name: constant.character.escape.identity.regexplus
+      - match: \\x(?![[:xdigit:]])
+        name: constant.character.escape.identity.regexplus
+
+  # https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Regular_expressions/Backreference
+  back-reference-number:
+    match: \\[1-9][0-9]*
+    name: variable.other.regexplus
+
+  back-reference-name:
+    patterns:
+      - begin: (?<!\\)(\\g<)
+        end: (?<!\\)(>)|$
+        captures:
+          1: { name: keyword.other.regexplus }
         patterns:
-          - include: '#syntax-escape'
-          - include: '#character-escape'
-          - include: '#disjunction'
-      - match: "(?x) --? | && | !! | \\#\\# | \\$\\$ | %% | \\*\\* | \\+\\+ | ,, | \\.\\. | :: | ;; | << | == | >> | \\?\\? | @@ | \\^\\^ | `` | ~~"
-        name: keyword.operator.or.regexp    # Same as TS/JS's |
-      - include: '#quantifier-short'
-      - include: '#quantifier-min-max'
-      - include: '#character-class'         # Recursive
+          - include: '#back-reference-subroutine-contents'
+      - begin: (?<!\\)(\\k<)
+        end: (?<!\\)(>)|$
+        captures:
+          1: { name: keyword.other.regexplus }
+        patterns:
+          - include: '#back-reference-name-contents'
+  back-reference-subroutine-contents:
+    patterns:
+      - match: '[_$\p{ID_Start}][$\p{ID_Continue}\u200C\u200D]*'
+        name: entity.name.function.regexplus
+      - match: '[^>]'
+        name: string.regexp
+  back-reference-name-contents:
+    patterns:
+      - match: '[_$\p{ID_Start}][$\p{ID_Continue}\u200C\u200D]*'
+        name: variable.other.regexplus
+      - match: '[^>]'
+        name: string.regexp
+
+  # https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Regular_expressions/Quantifier
+  # https://github.com/slevithan/regex/tree/main#possessive-quantifiers
+  quantifier-char:
+    patterns:
+      - match: (?:(?<=\\\()|(?<![\\(]))\?[?+]?
+        name: keyword.operator.quantifier.regexp    # Same as TS/JS
+      - match: '[*+][?+]?'
+        name: keyword.operator.quantifier.regexp    # Same as TS/JS
+
+  quantifier-range:
+    patterns:
+      - begin: (?<!\\[pPqu])(\{)
+        end: (?<!\\)(}[?+]?)|$
+        name: meta.quantifier.regexplus
+        captures:
+          1: { name: keyword.operator.quantifier.regexp }   # Same as TS/JS
+        patterns:
+          - include: '#quantifier-range-contents'
+  quantifier-range-contents:
+    patterns:
+      - match: \d+
+        name: constant.numeric.regexplus
+      - match: ','
+        name: keyword.operator.quantifier.regexp            # Same as TS/JS
       - match: \S
         name: string.regexp
 
-  group:
+  # https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Regular_expressions/Character_class
+  character-class:
+    begin: (?<!\\)(\[)(\^?)
+    end: (?<!\\)(\])
+    name: meta.character-class.regexplus
+    captures:
+      1: { name: punctuation.definition.character-class.regexp }    # Same as TS/JS
+      2: { name: keyword.operator.negation.regexp }                 # Same as TS/JS
     patterns:
-      - include: '#atomic-group'
+      - include: '#character-class'           # Recursive
+      - include: '#in-class-substring-escape' # Overrides default \q
+      - include: '#local-escapes'
+      - include: '#character-class-contents'
+  character-class-contents:
+    patterns:
+      # Operators only are operators when they don'i immediately follow the class opener or precede the class closer.
+      - match: '(?x: (?<!(?:\[\^)|\[) (?: --? | ([&!#$%*+,.:;<=>?@^`~])\1 ) (?!\]) )'
+        name: keyword.operator.or.regexp    # Same as TS/JS's |
+      # \b in classes is backspace escape, not boundary assertion.
+      - match: \\b
+        name: constant.character.escape.control.regexplus
+      - include: '#shared-escapes'
+      - match: \S
+        name: string.regexp
+
+  group-like:
+    patterns:
+      - include: '#inline-flags-modifiers'
       - include: '#look-around'
+      - include: '#atomic-group'
       - include: '#non-capturing-group'
       - include: '#named-capturing-group'
       - include: '#subroutine-definition-group'
       - include: '#simple-capturing-group'
-      - begin: \(\?
-        end: \)
+      - include: '#group-literal'
+
+  # https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Regular_expressions/Modifier
+  inline-flags-modifiers:
+    begin: (?<!\\)(\(\?)(?=[ims-])
+    end: (?<!\\)(\))
+    name: meta.group.inline-flags.regexplus
+    captures:
+      1: { name: punctuation.definition.group.regexp }      # Same as TS/JS
+    patterns:
+      - include: '#inline-flags-modifiers-contents'
+      - begin: (?<!\\)(:)
+        end: (?=(?<!\\)\))
+        beginCaptures:
+          1: { name: keyword.operator.separator.regexplus }
+        patterns:
+          - include: '#pattern'
+  inline-flags-modifiers-contents:
+    patterns:
+      - match: '[-ims]+'
+        name: storage.modifier.regexplus
+      - match: '[^-ims:)]+'
         name: string.regexp
+
+  look-around:
+    begin: (?<!\\)(\(\?<?[=!])
+    end: (?<!\\)(\))
+    name: meta.group.look-around.regexplus
+    captures:
+      1: { name: punctuation.definition.group.regexp }  # Same as JS/TS
+    patterns:
+      - include: '#pattern'
 
   # https://github.com/slevithan/regex/tree/main#atomic-groups
   atomic-group:
+    begin: (?<!\\)(\(\?>)
+    end: (?<!\\)(\))
     name: meta.group.atomic.regexplus
-    begin: \(\?>
-    end: \)
     captures:
-      0: { name: punctuation.definition.group.regexp }  # Same as JS/TS
+      1: { name: punctuation.definition.group.regexp }  # Same as JS/TS
     patterns:
-      - include: '#all-rules'
-
-  look-around:
-    name: meta.group.look-around.regexplus
-    begin: (?x) \(\? <?[=!]
-    end: \)
-    captures:
-      0: { name: punctuation.definition.group.regexp }  # Same as JS/TS
-    patterns:
-      - include: '#all-rules'
+      - include: '#pattern'
 
   non-capturing-group:
+    begin: (?<!\\)(\(\?:)
+    end: (?<!\\)(\))
     name: meta.group.no-capture.regexplus
-    begin: '\(\?:'
-    end: \)
     captures:
-      0: { name: punctuation.definition.group.regexp }  # Same as JS/TS
+      1: { name: punctuation.definition.group.regexp }  # Same as JS/TS
     patterns:
-      - include: '#all-rules'
+      - include: '#pattern'
 
   named-capturing-group:
+    begin: (?<!\\)(\(\?<)(?![=!])
+    end: (?<!\\)(\))
     name: meta.group.named-capture.regexplus
-    begin: (\(\?<)([^>)]*)(>)?
-    beginCaptures:
+    captures:
       1: { name: punctuation.definition.group.regexp }  # Same as JS/TS
-      2: { name: variable.other.regexplus }
-      3: { name: punctuation.definition.group.regexp }  # Same as JS/TS
-    end: \)
-    endCaptures:
-      0: { name: punctuation.definition.group.regexp }  # Same as JS/TS
     patterns:
-      - include: '#all-rules'
+      - include: '#named-capturing-group-contents'
+      - begin: (?<!\\)(>)
+        end: (?=(?<!\\)\))
+        beginCaptures:
+          1: { name: punctuation.definition.group.regexp }
+        patterns:
+          - include: '#pattern'
+  named-capturing-group-contents:
+    patterns:
+      - match: '[_$\p{ID_Start}][$\p{ID_Continue}\u200C\u200D]*'
+        name: variable.other.regexplus
+      - match: '[^>)]'
+        name: string.regexp
 
   subroutine-definition-group:
+    begin: (?<!\\)(\(\?\((DEFINE)\))
+    end: (?<!\\)(\))
     name: meta.group.subroutine-definition.regexplus
-    begin: \(\?\((DEFINE)\)
-    end: \)
     captures:
-      0: { name: punctuation.definition.group.regexp }  # Same as JS/TS
-      1: { name: support.function.regexp }
+      1: { name: punctuation.definition.group.regexp }  # Same as JS/TS
+      2: { name: support.function.regexp }
     patterns:
-      - include: '#all-rules'
+      - include: '#pattern'
 
   simple-capturing-group:
+    begin: (?<!\\)(\()(?:(\?(?![=!<>:ims-]))?)
+    end: (?<!\\)(\))
     name: meta.group.regexplus
-    begin: \((?!\?)
-    end: \)
     captures:
-      0: { name: punctuation.definition.group.regexp }  # Same as JS/TS
+      1: { name: punctuation.definition.group.regexp }  # Same as JS/TS
+      2: { name: keyword.operator.quantifier.regexp }  # Same as JS/TS
     patterns:
-      - include: '#all-rules'
+      - include: '#pattern'
 
 ...
