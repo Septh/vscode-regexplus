@@ -1,6 +1,10 @@
 /node_modules
 /dist
+/build
 /out
 /languages/grammars
+/source/extension/lezer/parser*.ts
 *.tsbuildinfo
 *.vsix
+
+zz*
