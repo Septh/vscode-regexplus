@@ -61,6 +61,6 @@ There is still work in progress and the missing features will be implemented gra
 
 ## Release Notes
 
-### 1.1.1
+### 1.1.2
 
 Buf fixes and improvements.
