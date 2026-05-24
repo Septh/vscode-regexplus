@@ -1,49 +1,52 @@
 $schema: https://raw.githubusercontent.com/RedCMD/TmLanguage-Syntax-Highlighter/main/vscode.tmLanguage.schema.json
 scopeName: text.embedded.HOST_LANGUAGE.regexplus
-injectionSelector: L:source.HOST_LANGUAGE -comment -(string -quoted -meta.embedded)
+injectionSelector: L:source.HOST_LANGUAGE -comment -(string -quoted) -meta.embedded
 
 patterns:
 
-  # regex`...` or pattern`...` (regular tagged template)
-  - begin: (?x) \b ((?:\w+\s*\.\s*)*) (regex)\s* (`)
+  # regex`...` or pattern`...` (regular tagged template, maybe preceded by a name in case someone does `import * as X from 'regex'`)
+  - begin: (?x) (?:\b(\w+)\s*(\.))? \b(regex|pattern)\s* (`)
     end: (`)
+    contentName: string.template.HOST_LANGUAGE meta.embedded.text.regexplus
     beginCaptures:
       1: { name: variable.other.object.HOST_LANGUAGE }
-      2: { name: entity.name.function.tagged-template.HOST_LANGUAGE }
-      3: { name: string.template.HOST_LANGUAGE punctuation.definition.string.template.begin.HOST_LANGUAGE }
+      2: { name: punctuation.accessor.HOST_LANGUAGE}
+      3: { name: entity.name.function.tagged-template.HOST_LANGUAGE }
+      4: { name: string.template.HOST_LANGUAGE punctuation.definition.string.template.begin.HOST_LANGUAGE }
     endCaptures:
       1: { name: string.template.HOST_LANGUAGE punctuation.definition.string.template.end.HOST_LANGUAGE }
-    contentName: text.regexplus
     patterns:
       - include: '#injections'
 
-  # regex('flags')`...` (function call with (single|double|backtick)-quoted flags)
-  - begin: (?x) \b ((?:\w+\s*\.\s*)*) (regex) \s*(\()\s* (?:(["'\`]) (.*?) (\4))? \s*(\))\s* (`)
+  # regex('flags')`...` (function call with (single|double|backtick)-quoted flags, maybe preceded by a name)
+  - begin: (?x) (?:\b(\w+)\s*(\.))? \b(regex) \s*(\()\s* (?:(["'\`]) (.*?) (\5))? \s*(\))\s* (`)
     end: (`)
+    contentName: string.template.HOST_LANGUAGE meta.embedded.text.regexplus
     beginCaptures:
       1: { name: variable.other.object.HOST_LANGUAGE }
-      2: { name: meta.function-call.HOST_LANGUAGE entity.name.function.HOST_LANGUAGE }
-      3: { name: meta.brace.round.HOST_LANGUAGE }
-      4: { name: string.quoted.single.HOST_LANGUAGE punctuation.definition.string.begin.HOST_LANGUAGE }
-      5:
+      2: { name: punctuation.accessor.HOST_LANGUAGE}
+      3: { name: meta.function-call.HOST_LANGUAGE entity.name.function.HOST_LANGUAGE }
+      4: { name: meta.brace.round.HOST_LANGUAGE }
+      5: { name: string.quoted.single.HOST_LANGUAGE punctuation.definition.string.begin.HOST_LANGUAGE }
+      6:
         name: string.quoted.single.HOST_LANGUAGE
         patterns:
         - match: ([dgimsuvy]+)  # cSpell:disable-line
           name: constant.language.regexplus
         - match: \S
           name: invalid.illegal.regexplus
-      6: { name: string.quoted.single.HOST_LANGUAGE punctuation.definition.string.end.HOST_LANGUAGE }
-      7: { name: meta.brace.round.HOST_LANGUAGE }
-      8: { name: string.template.HOST_LANGUAGE punctuation.definition.string.template.begin.HOST_LANGUAGE }
+      7: { name: string.quoted.single.HOST_LANGUAGE punctuation.definition.string.end.HOST_LANGUAGE }
+      8: { name: meta.brace.round.HOST_LANGUAGE }
+      9: { name: string.template.HOST_LANGUAGE punctuation.definition.string.template.begin.HOST_LANGUAGE }
     endCaptures:
       1: { name: string.template.HOST_LANGUAGE punctuation.definition.string.template.end.HOST_LANGUAGE }
-    contentName: text.regexplus
     patterns:
       - include: '#injections'
 
   # /* regex */`...` (comment prefix)
   - begin: (\/\*)(\s*regex\s*)(\*\/)\s*(`)
     end: (`)
+    contentName: string.template.HOST_LANGUAGE meta.embedded.text.regexplus
     beginCaptures:
       1: { name: comment.block.HOST_LANGUAGE punctuation.definition.comment.HOST_LANGUAGE }
       2: { name: comment.block.HOST_LANGUAGE }
@@ -51,18 +54,26 @@ patterns:
       4: { name: string.template.HOST_LANGUAGE punctuation.definition.string.template.begin.HOST_LANGUAGE }
     endCaptures:
       1: { name: string.template.HOST_LANGUAGE punctuation.definition.string.template.end.HOST_LANGUAGE }
-    contentName: text.regexplus
     patterns:
       - include: '#injections'
 
-  # `#regex ...` (embedded start comment)
-  - begin: (`)(?=\s*#\s*regex)
+  # `#regex ...` (embedded start comment, maybe preceded by a tag expression)
+  - begin: (?x) (?:\b(\w+)\s*(\.))? (?:\b(\w+)\s*(\.))? (?:\b(\w+)\s*(\.))? (?:\b(\w+)\s*(\.))? (?:\b(\w+)\s*)? (`)(?=\s*\#\s*r[ex])
     end: (`)
+    contentName: string.template.HOST_LANGUAGE meta.embedded.text.regexplus
     beginCaptures:
-      1: { name: string.template.HOST_LANGUAGE punctuation.definition.string.template.begin.HOST_LANGUAGE }
+      1: { name: variable.other.object.HOST_LANGUAGE }
+      2: { name: punctuation.accessor.HOST_LANGUAGE}
+      3: { name: variable.other.object.property.HOST_LANGUAGE }
+      4: { name: punctuation.accessor.HOST_LANGUAGE}
+      5: { name: variable.other.object.property.HOST_LANGUAGE }
+      6: { name: punctuation.accessor.HOST_LANGUAGE}
+      7: { name: variable.other.object.property.HOST_LANGUAGE }
+      8: { name: punctuation.accessor.HOST_LANGUAGE}
+      9: { name: entity.name.function.tagged-template.HOST_LANGUAGE }
+      10: { name: string.template.HOST_LANGUAGE punctuation.definition.string.template.begin.HOST_LANGUAGE }
     endCaptures:
       1: { name: string.template.HOST_LANGUAGE punctuation.definition.string.template.end.HOST_LANGUAGE }
-    contentName: text.regexplus
     patterns:
       - include: '#injections'
 
