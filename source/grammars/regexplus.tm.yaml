@@ -56,20 +56,20 @@ repository:
 
   # Anything that is not (the start of) a syntax token
   literal:
-    match: '(?x) [^ \\ ^$|.*+? (\[{ # ]+'
+    match: (?x) \\\s | [^ \# \\ ^ $ | . * + ? ( \[ { ]+
     name: string.regexp
 
   group-literal:
-    match: '(?x) [^ \\ ^$|.*+? () \[{ # ]+'
+    match: (?x) \\\s | [^ \# \\ ^ $ | . * + ? ( ) \[ { ]+
     name: string.regexp
 
   disjunction:
     match: \|
-    name: keyword.operator.disjunction.regexplus
+    name: keyword.operator.or.regexp
 
   wildcard:
     match: \.
-    name: keyword.operator.wildcard.regexplus
+    name: keyword.operator.or.regexp
 
   boundary-assertion:
     match: \^|\$|\\[bB]
@@ -77,7 +77,7 @@ repository:
 
   # https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Regular_expressions/Character_escape
   syntax-escape:
-    match: '(?x) \\ [ \\ ^$|.*+? () \[\] {} # ]'  # with # added
+    match: (?x) \\[ \# \\ ^ $ | . * + ? ( ) \[ \] { } ]  # with # added
     name: constant.character.escape.syntax.regexplus
 
   control-escape:
@@ -96,25 +96,25 @@ repository:
   hex-2-escape:
     match: (\\x)([[:xdigit:]]{1,2})
     captures:
-      1: { name: constant.character.escape.hex2.regexplus }
+      1: { name: constant.character.escape.numeric.regexplus }
       2: { name: constant.numeric.regexplus }
 
   hex-4-escape:
     match: (\\u)([[:xdigit:]]{1,4})
     captures:
-      1: { name: constant.character.escape.hex4.regexplus }
+      1: { name: constant.character.escape.numeric.regexplus }
       2: { name: constant.numeric.regexplus }
 
   hex-6-escape:
     begin: (?<!\\)(\\u\{)
     end: (?<!\\)(\})|$
     captures:
-      1: { name: constant.character.escape.hex6.regexplus }
+      1: { name: constant.character.escape.numeric.regexplus }
     patterns:
       - include: '#hex-6-escape-contents'
   hex-6-escape-contents:
     patterns:
-      - match: ([[:xdigit:]]+)
+      - match: '[[:xdigit:]]+'
         name: constant.numeric.regexplus
       - match: \S
         name: string.regexp
@@ -138,7 +138,7 @@ repository:
         name: string.regexp
 
   # https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Regular_expressions/Character_class#v-mode_character_class
-  # Altough \q is only valid in character classes, we wan't to match it anywhere
+  # Altough \q{} is only valid in character classes, we wan't to match it anywhere
   # and leave it to the linter to tell the user they made a mistake.
   substring-escape:
     begin: (?<!\\)(\\q\{)
@@ -176,13 +176,13 @@ repository:
     patterns:
       - match: \\[^\\\sbBcdDfgknpPqrsStuvwWx0-9]
         name: constant.character.escape.identity.regexplus
-      - match: \\c(?![{:alpha}])
+      - match: \\c(?![[:alpha:]])
         name: constant.character.escape.identity.regexplus
       - match: \\[gk](?!<)
         name: constant.character.escape.identity.regexplus
       - match: \\[pPq](?!\{)
         name: constant.character.escape.identity.regexplus
-      - match: \\u(?![[:xdigit:]{])
+      - match: \\u(?![{[:xdigit:]])
         name: constant.character.escape.identity.regexplus
       - match: \\x(?![[:xdigit:]])
         name: constant.character.escape.identity.regexplus
@@ -264,7 +264,7 @@ repository:
       # Operators only are operators when they don'i immediately follow the class opener or precede the class closer.
       - match: '(?x: (?<!(?:\[\^)|\[) (?: --? | ([&!#$%*+,.:;<=>?@^`~])\1 ) (?!\]) )'
         name: keyword.operator.or.regexp    # Same as TS/JS's |
-      # \b in classes is backspace escape, not boundary assertion.
+      # \b in classes is \x08, not boundary assertion.
       - match: \\b
         name: constant.character.escape.control.regexplus
       - include: '#shared-escapes'
@@ -299,9 +299,9 @@ repository:
           - include: '#pattern'
   inline-flags-modifiers-contents:
     patterns:
-      - match: '[-ims]+'
+      - match: '[ims-]+'
         name: storage.modifier.regexplus
-      - match: '[^-ims:)]+'
+      - match: '[^:)]+'
         name: string.regexp
 
   look-around:
@@ -369,7 +369,7 @@ repository:
     name: meta.group.regexplus
     captures:
       1: { name: punctuation.definition.group.regexp }  # Same as JS/TS
-      2: { name: keyword.operator.quantifier.regexp }  # Same as JS/TS
+      2: { name: keyword.operator.quantifier.regexp }   # Same as JS/TS
     patterns:
       - include: '#pattern'
 
