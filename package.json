@@ -92,7 +92,13 @@
           "meta.embedded.js.jsx.regexplus": "regexplus"
         }
       }
-    ]
+    ],
+    "configurationDefaults": {
+      "[regexplus]": {
+        "editor.matchBrackets": "near",
+        "editor.bracketPairColorization.enabled": false
+      }
+    }
   },
   "repository": {
     "type": "git",
