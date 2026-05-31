@@ -7,14 +7,18 @@
   "files.associations": {
     "/source/grammars/*.yaml": "yaml"
   },
+  "[json-textmate]": {
+    "editor.bracketPairColorization.enabled": false
+  },
   "cSpell.enabledFileTypes": {
     "yaml": true,
     "json": true
   },
   "cSpell.words": [
     "Levithan's",
-    "regexplus",
     "lezer",
+    "regexplus",
+    "slevithan",
     "tsls",
     "xdigit"
   ]
