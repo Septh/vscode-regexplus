@@ -7,7 +7,7 @@ patterns:
   # regex`...` or pattern`...` (regular tagged template, maybe preceded by a name in case someone does `import * as X from 'regex'`)
   - begin: (?x) (?:\b(\w+)\s*(\.))? \b(regex|pattern)\s* (`)
     end: (`)
-    contentName: string.template.HOST_LANGUAGE meta.embedded.text.regexplus
+    contentName: string.template.HOST_LANGUAGE text.regexplus
     beginCaptures:
       1: { name: variable.other.object.HOST_LANGUAGE }
       2: { name: punctuation.accessor.HOST_LANGUAGE}
@@ -21,7 +21,7 @@ patterns:
   # regex('flags')`...` (function call with (single|double|backtick)-quoted flags, maybe preceded by a name)
   - begin: (?x) (?:\b(\w+)\s*(\.))? \b(regex) \s*(\()\s* (?:(["'\`]) (.*?) (\5))? \s*(\))\s* (`)
     end: (`)
-    contentName: string.template.HOST_LANGUAGE meta.embedded.text.regexplus
+    contentName: string.template.HOST_LANGUAGE text.regexplus
     beginCaptures:
       1: { name: variable.other.object.HOST_LANGUAGE }
       2: { name: punctuation.accessor.HOST_LANGUAGE}
@@ -46,7 +46,7 @@ patterns:
   # /* regex */`...` (comment prefix)
   - begin: (\/\*)(\s*regex\s*)(\*\/)\s*(`)
     end: (`)
-    contentName: string.template.HOST_LANGUAGE meta.embedded.text.regexplus
+    contentName: string.template.HOST_LANGUAGE text.regexplus
     beginCaptures:
       1: { name: comment.block.HOST_LANGUAGE punctuation.definition.comment.HOST_LANGUAGE }
       2: { name: comment.block.HOST_LANGUAGE }
@@ -60,7 +60,7 @@ patterns:
   # `#regex ...` (embedded start comment, maybe preceded by a tag expression)
   - begin: (?x) (?:\b(\w+)\s*(\.))? (?:\b(\w+)\s*(\.))? (?:\b(\w+)\s*(\.))? (?:\b(\w+)\s*(\.))? (?:\b(\w+)\s*)? (`)(?=\s*\#\s*r[ex])
     end: (`)
-    contentName: string.template.HOST_LANGUAGE meta.embedded.text.regexplus
+    contentName: string.template.HOST_LANGUAGE text.regexplus
     beginCaptures:
       1: { name: variable.other.object.HOST_LANGUAGE }
       2: { name: punctuation.accessor.HOST_LANGUAGE}
