@@ -57,40 +57,28 @@
         "injectTo": [
           "source.ts"
         ],
-        "path": "./languages/grammars/injection.ts.tmLanguage.json",
-        "embeddedLanguages": {
-          "meta.embedded.ts.regexplus": "regexplus"
-        }
+        "path": "./languages/grammars/injection.ts.tmLanguage.json"
       },
       {
         "scopeName": "text.embedded.tsx.regexplus",
         "injectTo": [
           "source.tsx"
         ],
-        "path": "./languages/grammars/injection.tsx.tmLanguage.json",
-        "embeddedLanguages": {
-          "meta.embedded.tsx.regexplus": "regexplus"
-        }
+        "path": "./languages/grammars/injection.tsx.tmLanguage.json"
       },
       {
         "scopeName": "text.embedded.js.regexplus",
         "injectTo": [
           "source.js"
         ],
-        "path": "./languages/grammars/injection.js.tmLanguage.json",
-        "embeddedLanguages": {
-          "meta.embedded.js.regexplus": "regexplus"
-        }
+        "path": "./languages/grammars/injection.js.tmLanguage.json"
       },
       {
         "scopeName": "text.embedded.js.jsx.regexplus",
         "injectTo": [
           "source.jsx"
         ],
-        "path": "./languages/grammars/injection.jsx.tmLanguage.json",
-        "embeddedLanguages": {
-          "meta.embedded.js.jsx.regexplus": "regexplus"
-        }
+        "path": "./languages/grammars/injection.jsx.tmLanguage.json"
       }
     ],
     "configurationDefaults": {
