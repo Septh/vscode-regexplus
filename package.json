@@ -109,7 +109,7 @@
     "@types/js-yaml": "^4.0.9",
     "@types/node": "^24.12.2",
     "@types/vscode": "^1.100.0",
-    "@vscode/vsce": "^3.9.0",
+    "@vscode/vsce": "^3.9.2",
     "js-yaml": "^4.1.1",
     "regex": "^6.1.0",
     "rimraf": "^6.1.3",
